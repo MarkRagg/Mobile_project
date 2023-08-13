@@ -18,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.project.mobile_project.ui.HomeScreen
+import com.project.mobile_project.ui.LoginScreen
 
 sealed class AppScreen(val name: String) {
   object Home : AppScreen("Home")
@@ -108,11 +109,11 @@ private fun NavigationGraph(
 ) {
   NavHost(
     navController = navController,
-    startDestination = AppScreen.Home.name,
+    startDestination = AppScreen.Login.name,
     modifier = modifier.padding(innerPadding)
   ) {
-    composable(route = AppScreen.Home.name) {
-      HomeScreen("Sium")
+    composable(route = AppScreen.Login.name) {
+      LoginScreen()
     }
     composable(route = AppScreen.Login.name) {
       //AddScreen { navController.popBackStack(AppScreen.Home.name, inclusive = false) }
