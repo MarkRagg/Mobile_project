@@ -8,6 +8,10 @@ android {
     namespace 'com.project.mobile_project'
     compileSdk 33
 
+    dataBinding {
+        enabled = true
+    }
+
     defaultConfig {
         applicationId "com.project.mobile_project"
         minSdk 26
