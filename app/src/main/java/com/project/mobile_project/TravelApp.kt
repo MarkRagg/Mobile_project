@@ -2,11 +2,16 @@ package com.project.mobile_project
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -21,6 +26,56 @@ sealed class AppScreen(val name: String) {
   object Settings : AppScreen("Settings Screen")
 }
 
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopAppBarFunction(
+  currentScreen: String,
+  canNavigateBack: Boolean,
+  navigateUp: () -> Unit,
+  modifier: Modifier = Modifier,
+  onSettingsButtonClicked: () -> Unit
+) {
+  CenterAlignedTopAppBar(
+    title = {
+      Text(
+        text = currentScreen,
+        fontWeight = FontWeight.Medium,
+      )
+    },
+    modifier = modifier,
+    navigationIcon = {
+      //se si può navigare indietro (non home screen) allora appare la freccetta
+      if (canNavigateBack) {
+        IconButton(onClick = navigateUp) {
+          Icon(
+            imageVector = Icons.Filled.ArrowBack,
+            contentDescription = "Back button"
+          )
+        }
+      }
+    },
+    actions = {
+      if (currentScreen == AppScreen.Home.name) {
+        IconButton(onClick = { /* doSomething() */ }) {
+          Icon(Icons.Filled.Search, contentDescription = "Search")
+        }
+      }
+      if (currentScreen != AppScreen.Settings.name) {
+        IconButton(onClick =  onSettingsButtonClicked ) {
+          Icon(
+            Icons.Filled.Settings,
+            contentDescription = "Settings"// stringResource(id = R.string.settings)
+          )
+        }
+      }
+    },
+    colors = TopAppBarDefaults.smallTopAppBarColors(
+      containerColor = MaterialTheme.colorScheme.primaryContainer
+    )
+  )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavigationApp(
@@ -31,7 +86,16 @@ fun NavigationApp(
   // Get the name of the current screen
   val currentScreen = backStackEntry?.destination?.route ?: AppScreen.Home.name
 
-  Scaffold { innerPadding ->
+  Scaffold(
+    topBar = {
+      TopAppBarFunction(
+        currentScreen = currentScreen,
+        canNavigateBack = navController.previousBackStackEntry != null,
+        navigateUp = { navController.navigateUp() },
+        onSettingsButtonClicked = {navController.navigate(AppScreen.Settings.name)}
+      )
+    }
+  ) { innerPadding ->
     NavigationGraph(navController, innerPadding)
   }
 }
