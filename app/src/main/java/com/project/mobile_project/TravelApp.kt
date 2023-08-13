@@ -3,12 +3,12 @@ package com.project.mobile_project
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -18,110 +18,188 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.project.mobile_project.ui.HomeScreen
+import androidx.compose.runtime.setValue
 
 sealed class AppScreen(val name: String) {
-  object Home : AppScreen("Home")
-  object Login : AppScreen("Login Screen")
-  object Profile : AppScreen("Profile Screen")
-  object Settings : AppScreen("Settings Screen")
+    object Home : AppScreen("Home")
+    object Login : AppScreen("Login Screen")
+    object Profile : AppScreen("Profile Screen")
+
+    object Record : AppScreen("Record Screen")
+
+    object Settings : AppScreen("Settings Screen")
 }
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBarFunction(
-  currentScreen: String,
-  canNavigateBack: Boolean,
-  navigateUp: () -> Unit,
-  modifier: Modifier = Modifier,
-  onSettingsButtonClicked: () -> Unit
+    currentScreen: String,
+    canNavigateBack: Boolean,
+    navigateUp: () -> Unit,
+    modifier: Modifier = Modifier,
+    onSettingsButtonClicked: () -> Unit,
 ) {
-  CenterAlignedTopAppBar(
-    title = {
-      Text(
-        text = currentScreen,
-        fontWeight = FontWeight.Medium,
-      )
-    },
-    modifier = modifier,
-    navigationIcon = {
-      //se si può navigare indietro (non home screen) allora appare la freccetta
-      if (canNavigateBack) {
-        IconButton(onClick = navigateUp) {
-          Icon(
-            imageVector = Icons.Filled.ArrowBack,
-            contentDescription = "Back button"
-          )
-        }
-      }
-    },
-    actions = {
-      if (currentScreen == AppScreen.Home.name) {
-        IconButton(onClick = { /* doSomething() */ }) {
-          Icon(Icons.Filled.Search, contentDescription = "Search")
-        }
-      }
-      if (currentScreen != AppScreen.Settings.name) {
-        IconButton(onClick =  onSettingsButtonClicked ) {
-          Icon(
-            Icons.Filled.Settings,
-            contentDescription = "Settings"// stringResource(id = R.string.settings)
-          )
-        }
-      }
-    },
-    colors = TopAppBarDefaults.smallTopAppBarColors(
-      containerColor = MaterialTheme.colorScheme.primaryContainer
+    CenterAlignedTopAppBar(
+        title = {
+            Text(
+                text = currentScreen,
+                fontWeight = FontWeight.Medium,
+            )
+        },
+        modifier = modifier,
+        navigationIcon = {
+            //se si può navigare indietro (non home screen) allora appare la freccetta
+            if (canNavigateBack) {
+                IconButton(onClick = navigateUp) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "Back button"
+                    )
+                }
+            }
+        },
+        actions = {
+            /*if (currentScreen == AppScreen.Home.name) {
+                IconButton(onClick = onProfileButtonClicked ) {
+                    Icon(Icons.Filled.Person, contentDescription = "Profile")
+                }
+            }*/
+            if (currentScreen != AppScreen.Settings.name) {
+                IconButton(onClick =  onSettingsButtonClicked ) {
+                    Icon(
+                        Icons.Filled.Settings,
+                        contentDescription = "Settings"// stringResource(id = R.string.settings)
+                    )
+                }
+            }
+        },
+        colors = TopAppBarDefaults.smallTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        )
     )
-  )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BottomAppBarFunction(
+    currentScreen: String,
+
+    onHomeButtonClicked: () -> Unit,
+    onRecordButtonClicked: () -> Unit,
+    onProfileButtonClicked: () -> Unit
+) {
+    NavigationBar {
+        /*items.forEachIndexed { index, item ->
+            NavigationBarItem(
+                icon = { Icon(Icons.Filled.Favorite, contentDescription = item) },
+                label = { Text(item) },
+                selected = selectedItem == index,
+                onClick = { selectedItem = index }
+            )
+        }*/
+        NavigationBarItem(
+            icon = { /*Icon(Icons.Filled.Home, contentDescription = "Home")*/
+                IconButton(onClick =  onHomeButtonClicked ) {
+                    Icon(
+                        Icons.Filled.Home,
+                        contentDescription = "Home"
+                    )
+                }
+            },
+            label = { Text("Home") },
+            selected = currentScreen == AppScreen.Home.name,
+            onClick = { onHomeButtonClicked }
+        )
+        NavigationBarItem(
+            icon = { /*Icon(Icons.Filled.AddCircle, contentDescription = "Registra")*/
+                IconButton(onClick =  onRecordButtonClicked ) {
+                    Icon(
+                        Icons.Filled.AddCircle,
+                        contentDescription = "Record"
+                    )
+                }
+            },
+            label = { Text("Record") },
+            selected = currentScreen == AppScreen.Record.name,
+            onClick = { onRecordButtonClicked }
+        )
+        NavigationBarItem(
+            icon = { /*Icon(Icons.Filled.Person, contentDescription = "Profile") */
+                IconButton(onClick =  onProfileButtonClicked ) {
+                    Icon(
+                        Icons.Filled.Person,
+                        contentDescription = "Profile"
+                    )
+                }
+            },
+            label = { Text("Profile") },
+            selected = currentScreen == AppScreen.Profile.name,
+            onClick = { onProfileButtonClicked }
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavigationApp(
-  navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController()
 ) {
-  // Get current back stack entry
-  val backStackEntry by navController.currentBackStackEntryAsState()
-  // Get the name of the current screen
-  val currentScreen = backStackEntry?.destination?.route ?: AppScreen.Home.name
+    // Get current back stack entry
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    // Get the name of the current screen
+    val currentScreen = backStackEntry?.destination?.route ?: AppScreen.Home.name
 
-  Scaffold(
-    topBar = {
-      TopAppBarFunction(
-        currentScreen = currentScreen,
-        canNavigateBack = navController.previousBackStackEntry != null,
-        navigateUp = { navController.navigateUp() },
-        onSettingsButtonClicked = {navController.navigate(AppScreen.Settings.name)}
-      )
+    Scaffold(
+        topBar = {
+            TopAppBarFunction(
+                currentScreen = currentScreen,
+                canNavigateBack = navController.previousBackStackEntry != null,
+                navigateUp = { navController.navigateUp() },
+                onSettingsButtonClicked = {navController.navigate(AppScreen.Settings.name)},
+            )
+        },
+        bottomBar = {
+            BottomAppBarFunction(
+                currentScreen = currentScreen,
+                onHomeButtonClicked = {navController.navigate(AppScreen.Home.name)},
+                onRecordButtonClicked = {navController.navigate(AppScreen.Record.name)},
+                onProfileButtonClicked = {navController.navigate(AppScreen.Profile.name)}
+            )
+        }
+    ) { innerPadding ->
+        NavigationGraph(navController, innerPadding)
     }
-  ) { innerPadding ->
-    NavigationGraph(navController, innerPadding)
-  }
 }
 
 @Composable
 private fun NavigationGraph(
-  navController: NavHostController,
-  innerPadding: PaddingValues,
-  modifier: Modifier = Modifier
+    navController: NavHostController,
+    innerPadding: PaddingValues,
+    modifier: Modifier = Modifier
 ) {
-  NavHost(
-    navController = navController,
-    startDestination = AppScreen.Home.name,
-    modifier = modifier.padding(innerPadding)
-  ) {
-    composable(route = AppScreen.Home.name) {
-      HomeScreen("Sium")
+    NavHost(
+        navController = navController,
+        startDestination = AppScreen.Home.name,
+        modifier = modifier.padding(innerPadding)
+    ) {
+        composable(route = AppScreen.Home.name) {
+            HomeScreen("Sium")
+        }
+        composable(route = AppScreen.Login.name) {
+            //AddScreen { navController.popBackStack(AppScreen.Home.name, inclusive = false) }
+        }
+        composable(route = AppScreen.Record.name) {
+            HomeScreen("REGISTRAAAAAAAAAA")
+            //AddScreen { navController.popBackStack(AppScreen.Home.name, inclusive = false) }
+        }
+        composable(route = AppScreen.Profile.name) {
+            HomeScreen("IL TUO CAZZO DI PROFILO")
+            //DetailsScreen()
+        }
+        composable(route = AppScreen.Settings.name) {
+            HomeScreen("Chest è l'impostzione")
+            //SettingsScreen()
+        }
     }
-    composable(route = AppScreen.Login.name) {
-      //AddScreen { navController.popBackStack(AppScreen.Home.name, inclusive = false) }
-    }
-    composable(route = AppScreen.Profile.name) {
-      //DetailsScreen()
-    }
-    composable(route = AppScreen.Settings.name) {
-      //SettingsScreen()
-    }
-  }
 }
