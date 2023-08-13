@@ -1,9 +1,6 @@
 package com.project.mobile_project.ui
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -23,6 +20,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.project.mobile_project.data.AppDatabase
+import com.project.mobile_project.data.User
+import com.project.mobile_project.data.UserDAO
+import java.util.*
 
 @Preview
 @Composable
@@ -72,5 +73,30 @@ fun LoginScreen() {
         }
       }
     )
+    Button(
+      onClick = { insertNewUser(username, password) },
+      // Uses ButtonDefaults.ContentPadding by default
+      contentPadding = PaddingValues(
+        start = 20.dp,
+        top = 12.dp,
+        end = 20.dp,
+        bottom = 12.dp
+      )
+    ) {
+      Text("Login")
+    }
   }
+}
+
+private fun insertNewUser(username: String, password: String) {
+  var newUser = User(
+    userId = 1,
+    firstName = "Marco",
+    lastName = "Raggini",
+    username = username,
+    email = "a",
+    password = password,
+    salt = null,
+    profileImg = "a"
+  )
 }
