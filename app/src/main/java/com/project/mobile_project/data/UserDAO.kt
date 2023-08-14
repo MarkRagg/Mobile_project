@@ -1,17 +1,18 @@
 package com.project.mobile_project.data
 
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDAO {
     @Query("SELECT * FROM user")
-    fun getUsers(): List<User>
+    fun getUsers(): Flow<List<User>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(user: User)
 
     @Update
-    fun updateUser(user: User)
+    suspend fun updateUser(user: User)
 
     @Delete
     suspend fun delete(user: User)
@@ -21,9 +22,9 @@ interface UserDAO {
 
     @Transaction
     @Query("SELECT user.* FROM activity, user WHERE userCreatorId = userId")
-    fun getUserFromActivity(): User
+    suspend fun getUserFromActivity(): User
 
     @Transaction
     @Query("SELECT activity.* FROM activity, user WHERE userCreatorId = userId")
-    fun getActivitiesFromUser(): List<Activity>
+    suspend fun getActivitiesFromUser(): List<Activity>
 }
