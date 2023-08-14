@@ -5,9 +5,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.project.mobile_project.data.User
 import com.project.mobile_project.data.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class UsersViewModel(private val repository: UserRepository): ViewModel() {
+@HiltViewModel
+class UsersViewModel @Inject constructor(private val repository: UserRepository): ViewModel() {
 
     val allUsers = repository.allUsers
 

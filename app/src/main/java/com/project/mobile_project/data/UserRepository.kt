@@ -2,8 +2,9 @@ package com.project.mobile_project.data
 
 import androidx.annotation.WorkerThread
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class UserRepository(private val userDAO: UserDAO) {
+class UserRepository @Inject constructor(private val userDAO: UserDAO) {
 
     val allUsers: Flow<List<User>> = userDAO.getUsers()
 

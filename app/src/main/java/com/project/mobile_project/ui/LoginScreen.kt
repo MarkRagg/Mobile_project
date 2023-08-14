@@ -20,14 +20,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.project.mobile_project.UsersListApplication
 import com.project.mobile_project.data.AppDatabase
 import com.project.mobile_project.data.User
 import com.project.mobile_project.data.UserDAO
+import com.project.mobile_project.viewModel.UsersViewModel
+import com.project.mobile_project.viewModel.UsersViewModelFactory
 import java.util.*
+import androidx.activity.viewModels
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.project.mobile_project.TravelApp
 
 @Preview
 @Composable
 fun LoginScreen() {
+
+    val usersViewModel = hiltViewModel<UsersViewModel>()
 
   Column (
     modifier = Modifier
@@ -74,7 +82,7 @@ fun LoginScreen() {
       }
     )
     Button(
-      onClick = { insertNewUser(username, password) },
+      onClick = { insertNewUser(username, password, usersViewModel) },
       // Uses ButtonDefaults.ContentPadding by default
       contentPadding = PaddingValues(
         start = 20.dp,
@@ -88,8 +96,8 @@ fun LoginScreen() {
   }
 }
 
-private fun insertNewUser(username: String, password: String) {
-  var newUser = User(
+private fun insertNewUser(username: String, password: String, usersViewModel: UsersViewModel) {
+    var newUser = User(
     userId = 1,
     firstName = "Marco",
     lastName = "Raggini",
@@ -98,5 +106,7 @@ private fun insertNewUser(username: String, password: String) {
     password = password,
     salt = null,
     profileImg = "a"
-  )
+    )
+
+    usersViewModel.insertUser(newUser)
 }
