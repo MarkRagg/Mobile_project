@@ -2,6 +2,8 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.devtools.ksp'
+    id 'com.google.dagger.hilt.android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -55,6 +57,10 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+
+    kapt {
+        correctErrorTypes true
+    }
 }
 
 dependencies {
@@ -81,4 +87,9 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
     implementation("androidx.navigation:navigation-compose:$nav_version")
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
+
+    implementation "com.google.dagger:hilt-android:2.44"
+    kapt "com.google.dagger:hilt-compiler:2.44"
+
+    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
 }
