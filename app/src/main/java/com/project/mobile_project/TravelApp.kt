@@ -8,9 +8,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -18,7 +16,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.project.mobile_project.ui.HomeScreen
-import androidx.compose.runtime.setValue
 
 sealed class AppScreen(val name: String) {
     object Home : AppScreen("Home")
@@ -31,7 +28,6 @@ sealed class AppScreen(val name: String) {
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBarFunction(
     currentScreen: String,
@@ -60,11 +56,6 @@ fun TopAppBarFunction(
             }
         },
         actions = {
-            /*if (currentScreen == AppScreen.Home.name) {
-                IconButton(onClick = onProfileButtonClicked ) {
-                    Icon(Icons.Filled.Person, contentDescription = "Profile")
-                }
-            }*/
             if (currentScreen != AppScreen.Settings.name) {
                 IconButton(onClick =  onSettingsButtonClicked ) {
                     Icon(
@@ -80,62 +71,31 @@ fun TopAppBarFunction(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomAppBarFunction(
     currentScreen: String,
-
     onHomeButtonClicked: () -> Unit,
     onRecordButtonClicked: () -> Unit,
     onProfileButtonClicked: () -> Unit
 ) {
     NavigationBar {
-        /*items.forEachIndexed { index, item ->
-            NavigationBarItem(
-                icon = { Icon(Icons.Filled.Favorite, contentDescription = item) },
-                label = { Text(item) },
-                selected = selectedItem == index,
-                onClick = { selectedItem = index }
-            )
-        }*/
         NavigationBarItem(
-            icon = { /*Icon(Icons.Filled.Home, contentDescription = "Home")*/
-                IconButton(onClick =  onHomeButtonClicked ) {
-                    Icon(
-                        Icons.Filled.Home,
-                        contentDescription = "Home"
-                    )
-                }
-            },
+            icon = { Icon(Icons.Filled.Home, contentDescription = "Home") },
             label = { Text("Home") },
             selected = currentScreen == AppScreen.Home.name,
-            onClick = { onHomeButtonClicked }
+            onClick = onHomeButtonClicked
         )
         NavigationBarItem(
-            icon = { /*Icon(Icons.Filled.AddCircle, contentDescription = "Registra")*/
-                IconButton(onClick =  onRecordButtonClicked ) {
-                    Icon(
-                        Icons.Filled.AddCircle,
-                        contentDescription = "Record"
-                    )
-                }
-            },
+            icon = { Icon(Icons.Filled.AddCircle, contentDescription = "Registra") },
             label = { Text("Record") },
             selected = currentScreen == AppScreen.Record.name,
-            onClick = { onRecordButtonClicked }
+            onClick = onRecordButtonClicked
         )
         NavigationBarItem(
-            icon = { /*Icon(Icons.Filled.Person, contentDescription = "Profile") */
-                IconButton(onClick =  onProfileButtonClicked ) {
-                    Icon(
-                        Icons.Filled.Person,
-                        contentDescription = "Profile"
-                    )
-                }
-            },
+            icon = { Icon(Icons.Filled.Person, contentDescription = "Profile") },
             label = { Text("Profile") },
             selected = currentScreen == AppScreen.Profile.name,
-            onClick = { onProfileButtonClicked }
+            onClick = onProfileButtonClicked
         )
     }
 }
