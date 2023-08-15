@@ -20,22 +20,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.project.mobile_project.UsersListApplication
-import com.project.mobile_project.data.AppDatabase
-import com.project.mobile_project.data.User
-import com.project.mobile_project.data.UserDAO
-import com.project.mobile_project.viewModel.UsersViewModel
-import com.project.mobile_project.viewModel.UsersViewModelFactory
-import java.util.*
-import androidx.activity.viewModels
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.project.mobile_project.TravelApp
+import com.project.mobile_project.data.User
+import com.project.mobile_project.viewModel.UsersViewModel
 
 @Preview
 @Composable
 fun LoginScreen() {
 
-    val usersViewModel = hiltViewModel<UsersViewModel>()
+  val usersViewModel = hiltViewModel<UsersViewModel>()
 
   Column (
     modifier = Modifier
