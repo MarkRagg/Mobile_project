@@ -1,16 +1,18 @@
 package com.project.mobile_project
 
 import android.app.Application
+import android.content.Intent
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.core.content.ContextCompat.startActivity
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,9 +20,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.project.mobile_project.data.AppDatabase
 import com.project.mobile_project.ui.HomeScreen
-import com.project.mobile_project.ui.SettingsScreen
 import com.project.mobile_project.ui.LoginScreen
+import com.project.mobile_project.ui.SettingsScreen
+import com.project.mobile_project.viewModel.SettingsViewModel
 import dagger.hilt.android.HiltAndroidApp
+
 
 @HiltAndroidApp
 class TravelApp : Application() {
@@ -85,6 +89,7 @@ fun TopAppBarFunction(
 @Composable
 fun BottomAppBarFunction(
     currentScreen: String,
+    modifier: Modifier = Modifier,
     onHomeButtonClicked: () -> Unit,
     onRecordButtonClicked: () -> Unit,
     onProfileButtonClicked: () -> Unit
@@ -151,14 +156,15 @@ private fun NavigationGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = AppScreen.Login.name,
+        startDestination = AppScreen.Home.name,
         modifier = modifier.padding(innerPadding)
     ) {
-        composable(route = AppScreen.Login.name) {
-            LoginScreen()
+        composable(route = AppScreen.Home.name) {
+            HomeScreen("HOME")
         }
         composable(route = AppScreen.Login.name) {
             //AddScreen { navController.popBackStack(AppScreen.Home.name, inclusive = false) }
+            LoginScreen()
         }
         composable(route = AppScreen.Record.name) {
             HomeScreen("REGISTRAAAAAAAAAA")
@@ -169,8 +175,8 @@ private fun NavigationGraph(
             //DetailsScreen()
         }
         composable(route = AppScreen.Settings.name) {
-            HomeScreen("Chest è l'impostzione")
-            //SettingsScreen()
+            val settingsViewModel = hiltViewModel<SettingsViewModel>()
+            SettingsScreen(settingsViewModel)
         }
     }
 }

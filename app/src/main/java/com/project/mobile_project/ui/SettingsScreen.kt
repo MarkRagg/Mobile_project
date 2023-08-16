@@ -1,73 +1,66 @@
 package com.project.mobile_project.ui
 
-import android.content.Context
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import com.project.mobile_project.R
 import com.project.mobile_project.ui.theme.Mobile_projectTheme
+import com.project.mobile_project.viewModel.SettingsViewModel
+import android.content.res.Resources
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
 
-class SettingsScreen : ComponentActivity() {
-    @OptIn(ExperimentalMaterial3Api::class)
-    public override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SettingsScreen(settingsViewModel: SettingsViewModel) {
+    val theme by settingsViewModel.theme.collectAsState(initial = "")
+    Mobile_projectTheme(darkTheme = theme == "Dark") {
 
-        val themeKey = "THEME_KEY"
-        val sharedPref = getPreferences(Context.MODE_PRIVATE)
-        //val theme = sharedPref.getString(themeKey, "Light")
-
-        val theme = sharedPref.getString(themeKey, "Light")
-        setContent {
-            Mobile_projectTheme(darkTheme = theme == "Dark") {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    val radioOptions = listOf("Light", "Dark")
-                    val (selectedOption, onOptionSelected) = remember { mutableStateOf(theme) }
-
-                    Column(Modifier.selectableGroup()) {
-                        radioOptions.forEach { text ->
-                            Row(
-                                Modifier
-                                    .fillMaxWidth()
-                                    .height(56.dp)
-                                    .selectable(
-                                        selected = (text == selectedOption),
-                                        onClick = {
-                                            onOptionSelected(text)
-                                            with(sharedPref.edit()) {
-                                                putString(themeKey, text)
-                                                apply()
-                                            }
-                                        },
-                                        role = Role.RadioButton
-                                    )
-                                    .padding(horizontal = 16.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                RadioButton(
-                                    selected = (text == selectedOption),
-                                    onClick = null
-                                )
-                                Text(
-                                    text = text,
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    modifier = Modifier.padding(start = 16.dp)
-                                )
-                            }
-                        }
+        Scaffold { paddingValues ->
+            Column(
+                Modifier.selectableGroup()
+            ) {
+                Text(
+                    text = "Theme",
+                    fontSize = 18.sp,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(start = .dp)
+                )
+                
+                Spacer(modifier = Modifier.height(3.dp))
+                
+                val radioOptions = listOf("Light", "Dark")
+                radioOptions.forEach { text ->
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                            .selectable(
+                                selected = (text == theme),
+                                onClick = {
+                                    settingsViewModel.saveTheme(text)
+                                },
+                                role = Role.RadioButton
+                            )
+                            .padding(horizontal = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(
+                            selected = (text == theme),
+                            onClick = null // null recommended for accessibility with screenreaders
+                        )
+                        Text(
+                            text = text,
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier.padding(start = 16.dp)
+                        )
                     }
                 }
             }
