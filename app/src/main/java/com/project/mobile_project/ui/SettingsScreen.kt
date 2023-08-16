@@ -31,7 +31,7 @@ fun SettingsScreen(settingsViewModel: SettingsViewModel) {
                     fontSize = 18.sp,
                     color = MaterialTheme.colorScheme.onSecondaryContainer,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(start = .dp)
+                    modifier = Modifier.padding(start = 3.dp)
                 )
                 
                 Spacer(modifier = Modifier.height(3.dp))
