@@ -1,7 +1,6 @@
 package com.project.mobile_project
 
 import android.app.Application
-import android.content.Intent
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -11,8 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.core.content.ContextCompat.startActivity
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -24,7 +21,6 @@ import com.project.mobile_project.ui.LoginScreen
 import com.project.mobile_project.ui.SettingsScreen
 import com.project.mobile_project.viewModel.SettingsViewModel
 import dagger.hilt.android.HiltAndroidApp
-
 
 @HiltAndroidApp
 class TravelApp : Application() {
@@ -89,7 +85,6 @@ fun TopAppBarFunction(
 @Composable
 fun BottomAppBarFunction(
     currentScreen: String,
-    modifier: Modifier = Modifier,
     onHomeButtonClicked: () -> Unit,
     onRecordButtonClicked: () -> Unit,
     onProfileButtonClicked: () -> Unit
@@ -162,9 +157,14 @@ private fun NavigationGraph(
         composable(route = AppScreen.Home.name) {
             HomeScreen("HOME")
         }
+        composable(route = AppScreen.Home.name) {
+            HomeScreen("Sium")
+        }
         composable(route = AppScreen.Login.name) {
             //AddScreen { navController.popBackStack(AppScreen.Home.name, inclusive = false) }
             LoginScreen()
+        }
+            //AddScreen { navController.popBackStack(AppScreen.Home.name, inclusive = false) }
         }
         composable(route = AppScreen.Record.name) {
             HomeScreen("REGISTRAAAAAAAAAA")
