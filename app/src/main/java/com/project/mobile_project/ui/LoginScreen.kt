@@ -1,16 +1,13 @@
 package com.project.mobile_project.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -21,10 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.project.mobile_project.data.User
-import java.util.*
-import com.project.mobile_project.TravelApp
-import com.project.mobile_project.viewModel.UsersViewModelFactory
-import androidx.activity.viewModels
+import androidx.compose.runtime.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.project.mobile_project.viewModel.UsersViewModel
 
@@ -33,6 +27,7 @@ import com.project.mobile_project.viewModel.UsersViewModel
 fun LoginScreen() {
 
   val usersViewModel = hiltViewModel<UsersViewModel>()
+  val users = usersViewModel.allUsers.collectAsState(initial = listOf()).value
 
   Column (
     modifier = Modifier
@@ -79,7 +74,7 @@ fun LoginScreen() {
       }
     )
     Button(
-      onClick = { insertNewUser(username, password, usersViewModel) },
+      onClick = { insertNewUser(username, password, usersViewModel, users) },
       // Uses ButtonDefaults.ContentPadding by default
       contentPadding = PaddingValues(
         start = 20.dp,
@@ -93,9 +88,8 @@ fun LoginScreen() {
   }
 }
 
-private fun insertNewUser(username: String, password: String, usersViewModel: UsersViewModel) {
+private fun insertNewUser(username: String, password: String, usersViewModel: UsersViewModel, users: List<User>) {
     var newUser = User(
-    userId = 1,
     firstName = "Marco",
     lastName = "Raggini",
     username = username,
@@ -105,5 +99,31 @@ private fun insertNewUser(username: String, password: String, usersViewModel: Us
     profileImg = "a"
     )
 
-    usersViewModel.insertUser(newUser)
+    val userInDb = userExist(users, username)
+    if(userInDb != null) {
+      //TODO far uscire qualcosa di UI per dire che l'username esiste già
+    } else {
+      usersViewModel.insertUser(newUser)
+    }
+}
+
+private fun login(users: List<User>, username: String) {
+  val userInDb = userExist(users, username)
+  if(userInDb != null) {
+    //TODO cambiare schermata
+  } else {
+    //TODO far uscire qualcosa di UI per dire che quell'username non esiste
+  }
+}
+
+private fun userExist(users: List<User>, username: String): User?{
+  var exist: User? = null
+
+  for(user in users) {
+    if(user.username == username) {
+      exist = user
+    }
+  }
+
+  return exist
 }

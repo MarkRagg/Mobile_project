@@ -29,6 +29,14 @@ class UsersViewModel @Inject constructor(private val repository: UserRepository)
     fun deleteAllUsers() = viewModelScope.launch {
         repository.deleteAllUser()
     }
+
+    private var _userSelected: User? = null
+    val userSelected
+        get() = _userSelected
+
+    fun selectUser(user: User) {
+        _userSelected = user
+    }
 }
 
 class UsersViewModelFactory(private val repository: UserRepository) : ViewModelProvider.Factory {
