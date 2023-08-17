@@ -24,17 +24,21 @@ fun SettingsScreen(settingsViewModel: SettingsViewModel) {
 
         Scaffold { paddingValues ->
             Column(
-                Modifier.selectableGroup()
+                Modifier
+                    .selectableGroup()
+                    .padding(paddingValues)
+                    .padding(10.dp)
+                    .fillMaxSize(),
             ) {
                 Text(
                     text = "Theme",
-                    fontSize = 18.sp,
+                    fontSize = 20.sp,
                     color = MaterialTheme.colorScheme.onSecondaryContainer,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(start = 3.dp)
+                    modifier = Modifier.padding(3.dp)
                 )
                 
-                Spacer(modifier = Modifier.height(3.dp))
+                Spacer(modifier = Modifier.size(3.dp))
                 
                 val radioOptions = listOf("Light", "Dark")
                 radioOptions.forEach { text ->

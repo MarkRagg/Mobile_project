@@ -26,6 +26,7 @@ import com.project.mobile_project.TravelApp
 import com.project.mobile_project.viewModel.UsersViewModelFactory
 import androidx.activity.viewModels
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.project.mobile_project.viewModel.UsersViewModel
 
 @Preview
 @Composable

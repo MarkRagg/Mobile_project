@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -163,8 +164,6 @@ private fun NavigationGraph(
         composable(route = AppScreen.Login.name) {
             //AddScreen { navController.popBackStack(AppScreen.Home.name, inclusive = false) }
             LoginScreen()
-        }
-            //AddScreen { navController.popBackStack(AppScreen.Home.name, inclusive = false) }
         }
         composable(route = AppScreen.Record.name) {
             HomeScreen("REGISTRAAAAAAAAAA")
