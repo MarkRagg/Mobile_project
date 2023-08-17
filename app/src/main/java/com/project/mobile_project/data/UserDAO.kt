@@ -21,10 +21,10 @@ interface UserDAO {
     suspend fun deleteAll()
 
     @Transaction
-    @Query("SELECT user.* FROM activity, user WHERE userCreatorId = userId")
+    @Query("SELECT user.* FROM activity, user WHERE userCreatorId = username")
     suspend fun getUserFromActivity(): User
 
     @Transaction
-    @Query("SELECT activity.* FROM activity, user WHERE userCreatorId = userId")
+    @Query("SELECT activity.* FROM activity, user WHERE userCreatorId = username")
     suspend fun getActivitiesFromUser(): List<Activity>
 }
