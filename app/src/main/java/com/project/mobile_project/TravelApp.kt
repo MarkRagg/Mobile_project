@@ -47,6 +47,7 @@ fun TopAppBarFunction(
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
     onSettingsButtonClicked: () -> Unit,
+    onLogoutButtonClicked: () -> Unit
 ) {
     CenterAlignedTopAppBar(
         title = {
@@ -58,7 +59,7 @@ fun TopAppBarFunction(
         modifier = modifier,
         navigationIcon = {
             //se si può navigare indietro (non home screen) allora appare la freccetta
-            if (canNavigateBack) {
+            if (canNavigateBack && currentScreen != AppScreen.Login.name) {
                 IconButton(onClick = navigateUp) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
@@ -68,11 +69,19 @@ fun TopAppBarFunction(
             }
         },
         actions = {
-            if (currentScreen != AppScreen.Settings.name) {
+            if (currentScreen != AppScreen.Settings.name && currentScreen != AppScreen.Login.name) {
                 IconButton(onClick =  onSettingsButtonClicked ) {
                     Icon(
                         Icons.Filled.Settings,
-                        contentDescription = "Settings"// stringResource(id = R.string.settings)
+                        contentDescription = "Settings"
+                    )
+                }
+            }
+            if (currentScreen == AppScreen.Profile.name) {
+                IconButton(onClick = onLogoutButtonClicked ) {
+                    Icon(
+                        Icons.Filled.ExitToApp,
+                        contentDescription = "Logout"
                     )
                 }
             }
@@ -129,6 +138,7 @@ fun NavigationApp(
                 canNavigateBack = navController.previousBackStackEntry != null,
                 navigateUp = { navController.navigateUp() },
                 onSettingsButtonClicked = {navController.navigate(AppScreen.Settings.name)},
+                onLogoutButtonClicked = {navController.navigate(AppScreen.Login.name)}
             )
         },
         bottomBar = {
