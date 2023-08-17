@@ -19,6 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import com.project.mobile_project.data.AppDatabase
 import com.project.mobile_project.ui.HomeScreen
 import com.project.mobile_project.ui.LoginScreen
+import com.project.mobile_project.ui.ProfileScreen
 import com.project.mobile_project.ui.SettingsScreen
 import com.project.mobile_project.viewModel.SettingsViewModel
 import dagger.hilt.android.HiltAndroidApp
@@ -31,14 +32,13 @@ class TravelApp : Application() {
 
 sealed class AppScreen(val name: String) {
     object Home : AppScreen("Home")
-    object Login : AppScreen("Login Screen")
-    object Profile : AppScreen("Profile Screen")
+    object Login : AppScreen("Login")
+    object Profile : AppScreen("Profile")
 
-    object Record : AppScreen("Record Screen")
+    object Record : AppScreen("Record")
 
-    object Settings : AppScreen("Settings Screen")
+    object Settings : AppScreen("Settings")
 }
-
 
 @Composable
 fun TopAppBarFunction(
@@ -180,8 +180,7 @@ private fun NavigationGraph(
             //AddScreen { navController.popBackStack(AppScreen.Home.name, inclusive = false) }
         }
         composable(route = AppScreen.Profile.name) {
-            HomeScreen("IL TUO CAZZO DI PROFILO")
-            //DetailsScreen()
+            ProfileScreen()
         }
         composable(route = AppScreen.Settings.name) {
             val settingsViewModel = hiltViewModel<SettingsViewModel>()
