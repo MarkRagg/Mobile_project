@@ -173,7 +173,7 @@ private fun NavigationGraph(
         }
         composable(route = AppScreen.Login.name) {
             //AddScreen { navController.popBackStack(AppScreen.Home.name, inclusive = false) }
-            LoginScreen()
+            //LoginScreen()
         }
         composable(route = AppScreen.Record.name) {
             HomeScreen("REGISTRAAAAAAAAAA")

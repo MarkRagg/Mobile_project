@@ -29,6 +29,11 @@ class UserRepository @Inject constructor(private val userDAO: UserDAO) {
     }
 
     @WorkerThread
+    fun getUserFromUsernameAndPassw(usernameSelected: String, passwordSelected: String): Flow<User> {
+        return userDAO.getUserFromUsernameAndPassw(usernameSelected, passwordSelected)
+    }
+
+    /*@WorkerThread
     suspend fun getUserFromActivity() {
         userDAO.getUserFromActivity()
     }
@@ -36,5 +41,5 @@ class UserRepository @Inject constructor(private val userDAO: UserDAO) {
     @WorkerThread
     suspend fun getActivityFromUser() {
         userDAO.getActivitiesFromUser()
-    }
+    }*/
 }
