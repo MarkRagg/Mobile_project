@@ -1,6 +1,8 @@
 package com.project.mobile_project
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,9 +21,12 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    val USERNAME_LOGGED_PREF = "usernameLoggedPref"
     private val settingsViewModel: SettingsViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val sharedPreferences: SharedPreferences = getSharedPreferences(USERNAME_LOGGED_PREF, Context.MODE_PRIVATE)
+
         setContent {
             val theme by settingsViewModel.theme.collectAsState(initial = "")
             Mobile_projectTheme(darkTheme = theme == "Dark") {
@@ -31,9 +36,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val i = Intent(applicationContext, LoginScreen::class.java)
-                    startActivity(i)
-                    //NavigationApp()
+
+                    if(sharedPreferences.getBoolean("userLogged", false)) {
+                        NavigationApp(sharedPreferences = sharedPreferences, context = applicationContext)
+                    } else {
+                        val i = Intent(applicationContext, LoginScreen::class.java)
+                        startActivity(i)
+                    }
                 }
             }
         }

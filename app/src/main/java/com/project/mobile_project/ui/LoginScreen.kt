@@ -1,6 +1,8 @@
 package com.project.mobile_project.ui
 
 import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -23,7 +25,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.project.mobile_project.data.User
 import androidx.compose.runtime.*
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.LifecycleOwner
+import com.project.mobile_project.MainActivity
 import com.project.mobile_project.ui.theme.Mobile_projectTheme
 import com.project.mobile_project.viewModel.SettingsViewModel
 import com.project.mobile_project.viewModel.UsersViewModel
@@ -37,7 +41,9 @@ class LoginScreen: ComponentActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContent {
+    val sharedPreferences: SharedPreferences = getSharedPreferences("usernameLoggedPref", Context.MODE_PRIVATE)
+
+      setContent {
       val theme by settingsViewModel.theme.collectAsState(initial = "")
       Mobile_projectTheme(darkTheme = theme == "Dark") {
 
@@ -92,7 +98,8 @@ class LoginScreen: ComponentActivity() {
                 }
               )
               Button(
-                onClick = { login(username, password, usersViewModel, activity, activity) },
+                onClick = { login(username, password, usersViewModel, activity, activity, sharedPreferences) },
+
                 // Uses ButtonDefaults.ContentPadding by default
                 contentPadding = PaddingValues(
                   start = 20.dp,
@@ -111,8 +118,6 @@ class LoginScreen: ComponentActivity() {
 }
 
 private fun insertNewUser(username: String, password: String, usersViewModel: UsersViewModel, users: List<User>, context: Context) {
-
-
     val newUser = User(
     firstName = "Marco",
     lastName = "Raggini",
@@ -131,12 +136,13 @@ private fun insertNewUser(username: String, password: String, usersViewModel: Us
     }
 }
 
-private fun login(username: String, password: String, viewModel: UsersViewModel, lifecycleOwner: LifecycleOwner, context: Context) {
-
+private fun login(username: String, password: String, viewModel: UsersViewModel, lifecycleOwner: LifecycleOwner, context: Context, sharedPreferences: SharedPreferences) {
   viewModel.getUserFromUsername(username, password)
   viewModel.userLiveData.observe(lifecycleOwner) {
     if(it != null) {
-        Toast.makeText(context, "$it logged", Toast.LENGTH_LONG).show()
+        saveLoggedUser(username, sharedPreferences)
+        val homeIntent = Intent(context, MainActivity::class.java)
+        startActivity(context, homeIntent, null)
     } else {
         Toast.makeText(context, "Username or password wrong!", Toast.LENGTH_LONG).show()
     }
@@ -153,4 +159,12 @@ private fun userExist(users: List<User>, username: String): User?{
   }
 
   return exist
+}
+
+private fun saveLoggedUser(username: String, sharedPreferences: SharedPreferences) {
+    val editor: SharedPreferences.Editor = sharedPreferences.edit()
+
+    editor.putBoolean("userLogged", true)
+    editor.putString("usernameLogged", username)
+    editor.apply()
 }
