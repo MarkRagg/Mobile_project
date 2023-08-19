@@ -160,6 +160,7 @@ private fun NavigationGraph(
     innerPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
+    val usersViewModel = null // hiltViewModel<UsersViewModel>()
     NavHost(
         navController = navController,
         startDestination = AppScreen.Home.name,
@@ -180,7 +181,7 @@ private fun NavigationGraph(
             //AddScreen { navController.popBackStack(AppScreen.Home.name, inclusive = false) }
         }
         composable(route = AppScreen.Profile.name) {
-            ProfileScreen()
+            ProfileScreen(usersViewModel = null)
         }
         composable(route = AppScreen.Settings.name) {
             val settingsViewModel = hiltViewModel<SettingsViewModel>()
