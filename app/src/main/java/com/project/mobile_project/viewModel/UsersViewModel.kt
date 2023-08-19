@@ -1,5 +1,6 @@
 package com.project.mobile_project.viewModel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -13,6 +14,7 @@ import javax.inject.Inject
 class UsersViewModel @Inject constructor(private val repository: UserRepository): ViewModel() {
 
     val allUsers = repository.allUsers
+    val userLiveData = MutableLiveData<User>()
 
     fun insertUser(user: User) = viewModelScope.launch {
         repository.insertUser(user)
@@ -28,6 +30,12 @@ class UsersViewModel @Inject constructor(private val repository: UserRepository)
 
     fun deleteAllUsers() = viewModelScope.launch {
         repository.deleteAllUser()
+    }
+
+    fun getUserFromUsername(username: String, password: String) = viewModelScope.launch {
+        repository.getUserFromUsernameAndPassw(username, password).collect {
+            userLiveData.postValue(it)
+        }
     }
 
     private var _userSelected: User? = null

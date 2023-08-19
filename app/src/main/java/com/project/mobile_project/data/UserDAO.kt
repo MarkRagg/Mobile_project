@@ -20,11 +20,14 @@ interface UserDAO {
     @Query("DELETE FROM user")
     suspend fun deleteAll()
 
-    @Transaction
+    @Query("SELECT * FROM user WHERE username = :usernameSelected AND password = :passwordSelected")
+    fun getUserFromUsernameAndPassw(usernameSelected: String, passwordSelected: String): Flow<User>
+
+    /*@Transaction
     @Query("SELECT user.* FROM activity, user WHERE userCreatorId = username")
     suspend fun getUserFromActivity(): User
 
     @Transaction
     @Query("SELECT activity.* FROM activity, user WHERE userCreatorId = username")
-    suspend fun getActivitiesFromUser(): List<Activity>
+    suspend fun getActivitiesFromUser(): List<Activity>*/
 }
