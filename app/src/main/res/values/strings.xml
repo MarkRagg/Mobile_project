@@ -2,4 +2,8 @@
     <string name="app_name">Mobile_project</string>
     <string name="light_theme">Light</string>
     <string name="dark_theme">Dark</string>
+
+    <string name="activity_title">Activity Title</string>
+    <string name="activity_description">Activity Description</string>
+    <string name="share_activity">Share Activity</string>
 </resources>

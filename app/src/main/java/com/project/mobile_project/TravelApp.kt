@@ -17,10 +17,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.project.mobile_project.data.AppDatabase
-import com.project.mobile_project.ui.HomeScreen
-import com.project.mobile_project.ui.LoginScreen
-import com.project.mobile_project.ui.ProfileScreen
-import com.project.mobile_project.ui.SettingsScreen
+import com.project.mobile_project.ui.*
+import com.project.mobile_project.viewModel.ActivitiesViewModel
 import com.project.mobile_project.viewModel.SettingsViewModel
 import dagger.hilt.android.HiltAndroidApp
 
@@ -32,6 +30,8 @@ class TravelApp : Application() {
 
 sealed class AppScreen(val name: String) {
     object Home : AppScreen("Home")
+    object Details : AppScreen("Details Screen")
+
     object Login : AppScreen("Login")
     object Profile : AppScreen("Profile")
 
@@ -161,23 +161,29 @@ private fun NavigationGraph(
     modifier: Modifier = Modifier
 ) {
     val usersViewModel = null // hiltViewModel<UsersViewModel>()
+    val activitiesVieModel = hiltViewModel<ActivitiesViewModel>()
     NavHost(
         navController = navController,
         startDestination = AppScreen.Home.name,
         modifier = modifier.padding(innerPadding)
     ) {
         composable(route = AppScreen.Home.name) {
-            HomeScreen("HOME")
+            HomeScreen(
+                onItemClicked = {
+                    navController.navigate(AppScreen.Details.name)
+                },
+                activitiesViewModel = activitiesVieModel
+            )
         }
-        composable(route = AppScreen.Home.name) {
-            HomeScreen("Sium")
+        composable(route = AppScreen.Details.name) {
+            DetailsScreen(activitiesViewModel = activitiesVieModel)
         }
         composable(route = AppScreen.Login.name) {
             //AddScreen { navController.popBackStack(AppScreen.Home.name, inclusive = false) }
             //LoginScreen()
         }
         composable(route = AppScreen.Record.name) {
-            HomeScreen("REGISTRAAAAAAAAAA")
+            // HomeScreen("REGISTRAAAAAAAAAA")
             //AddScreen { navController.popBackStack(AppScreen.Home.name, inclusive = false) }
         }
         composable(route = AppScreen.Profile.name) {

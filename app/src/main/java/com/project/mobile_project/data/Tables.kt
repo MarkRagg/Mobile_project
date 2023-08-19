@@ -1,8 +1,6 @@
 package com.project.mobile_project.data
 
-import android.graphics.Bitmap
 import androidx.room.*
-import java.sql.Blob
 
 @Entity(tableName = "user")
 data class User (
@@ -18,7 +16,7 @@ data class User (
 @Entity(tableName = "activity")
 data class Activity(
     @PrimaryKey var activityId: String,
-    var userCreatorId: Int,
+    var userCreatorUsername: String,
     var name: String,
     var description: String?,
     var totalTime: Long,
@@ -33,7 +31,7 @@ data class UserWithActivity(
     @Embedded val user: User,
     @Relation(
         parentColumn = "username",
-        entityColumn = "userCreatorId"
+        entityColumn = "userCreatorUsername"
     )
     val activities: List<Activity>
 )
