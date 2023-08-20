@@ -32,6 +32,9 @@
         <activity android:name="com.project.mobile_project.ui.LoginScreen"
             android:theme="@style/Theme.Mobile_project" >
         </activity>
+        <activity android:name="com.project.mobile_project.ui.RegistrationScreen"
+            android:theme="@style/Theme.Mobile_project" >
+        </activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"

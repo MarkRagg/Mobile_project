@@ -9,6 +9,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -25,9 +26,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.project.mobile_project.data.User
 import androidx.compose.runtime.*
+import androidx.compose.ui.text.AnnotatedString
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.LifecycleOwner
 import com.project.mobile_project.MainActivity
+import com.project.mobile_project.R
 import com.project.mobile_project.ui.theme.Mobile_projectTheme
 import com.project.mobile_project.viewModel.SettingsViewModel
 import com.project.mobile_project.viewModel.UsersViewModel
@@ -37,17 +40,16 @@ import dagger.hilt.android.AndroidEntryPoint
 class LoginScreen: ComponentActivity() {
   private val settingsViewModel: SettingsViewModel by viewModels()
   private val usersViewModel: UsersViewModel by viewModels()
-  val activity = this
+  private val activity = this
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    val sharedPreferences: SharedPreferences = getSharedPreferences("usernameLoggedPref", Context.MODE_PRIVATE)
+    val sharedPreferences: SharedPreferences = getSharedPreferences(getString(R.string.user_shared_preferences), Context.MODE_PRIVATE)
 
       setContent {
       val theme by settingsViewModel.theme.collectAsState(initial = "")
       Mobile_projectTheme(darkTheme = theme == "Dark") {
 
-        val users = usersViewModel.allUsers.collectAsState(initial = listOf()).value
         // A surface container using the 'background' color from the theme
         Surface(
           modifier = Modifier.fillMaxSize(),
@@ -55,8 +57,8 @@ class LoginScreen: ComponentActivity() {
         ) {
           Column (
             modifier = Modifier
-              .padding(all = 12.dp)
-              .fillMaxSize(),
+                .padding(all = 12.dp)
+                .fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
           ) {
@@ -73,14 +75,14 @@ class LoginScreen: ComponentActivity() {
               OutlinedTextField(
                 value = username,
                 onValueChange = { newText: String -> username = newText },
-                label = { Text("Username") },
-                placeholder = { Text("...") }
+                label = { Text(getString(R.string.username_text)) },
+                placeholder = { Text(getString(R.string.username_text)) }
               )
               OutlinedTextField(
                 value = password,
                 onValueChange = { newText: String -> password = newText },
-                label = { Text("Password") },
-                placeholder = { Text("...") },
+                label = { Text(getString(R.string.password_text)) },
+                placeholder = { Text(getString(R.string.password_text)) },
                 singleLine = true,
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -97,18 +99,25 @@ class LoginScreen: ComponentActivity() {
                   }
                 }
               )
-              Button(
-                onClick = { login(username, password, usersViewModel, activity, activity, sharedPreferences) },
+              Spacer(modifier = Modifier.padding(5.dp))
+              Row {
+                  Button(
+                      onClick = { login(username, password, usersViewModel, activity, activity, sharedPreferences) },
 
-                // Uses ButtonDefaults.ContentPadding by default
-                contentPadding = PaddingValues(
-                  start = 20.dp,
-                  top = 12.dp,
-                  end = 20.dp,
-                  bottom = 12.dp
-                )
-              ) {
-                Text("Login")
+                      // Uses ButtonDefaults.ContentPadding by default
+                      contentPadding = PaddingValues(
+                          start = 20.dp,
+                          top = 12.dp,
+                          end = 20.dp,
+                          bottom = 12.dp
+                      )
+                  ) {
+                      Text("Login")
+                  }
+                  ClickableText(
+                      text = AnnotatedString("Registrati ora.."),
+                      onClick = { goingToRegistrationScreen(activity) }
+                  )
               }
           }
         }
@@ -117,34 +126,15 @@ class LoginScreen: ComponentActivity() {
   }
 }
 
-private fun insertNewUser(username: String, password: String, usersViewModel: UsersViewModel, users: List<User>, context: Context) {
-    val newUser = User(
-    firstName = "Marco",
-    lastName = "Raggini",
-    username = username,
-    email = "a",
-    password = password,
-    salt = null,
-    profileImg = "a"
-    )
-
-    val userInDb = userExist(users, username)
-    if(userInDb != null) {
-      Toast.makeText(context, "Username già usato!", Toast.LENGTH_LONG).show()
-    } else {
-      usersViewModel.insertUser(newUser)
-    }
-}
-
 private fun login(username: String, password: String, viewModel: UsersViewModel, lifecycleOwner: LifecycleOwner, context: Context, sharedPreferences: SharedPreferences) {
   viewModel.getUserFromUsername(username, password)
   viewModel.userLiveData.observe(lifecycleOwner) {
     if(it != null) {
-        saveLoggedUser(username, sharedPreferences)
+        saveLoggedUser(username, sharedPreferences, context)
         val homeIntent = Intent(context, MainActivity::class.java)
         startActivity(context, homeIntent, null)
     } else {
-        Toast.makeText(context, "Username or password wrong!", Toast.LENGTH_LONG).show()
+        Toast.makeText(context, "Username o password sbagliata!", Toast.LENGTH_LONG).show()
     }
   }
 }
@@ -161,10 +151,15 @@ private fun userExist(users: List<User>, username: String): User?{
   return exist
 }
 
-private fun saveLoggedUser(username: String, sharedPreferences: SharedPreferences) {
+fun saveLoggedUser(username: String, sharedPreferences: SharedPreferences, context: Context) {
     val editor: SharedPreferences.Editor = sharedPreferences.edit()
 
-    editor.putBoolean("userLogged", true)
-    editor.putString("usernameLogged", username)
+    editor.putBoolean(context.getString(R.string.user_logged_shared_pref), true)
+    editor.putString(context.getString(R.string.username_shared_pref), username)
     editor.apply()
+}
+
+private fun goingToRegistrationScreen(context: Context) {
+    val registrationIntent = Intent(context, RegistrationScreen::class.java)
+    startActivity(context, registrationIntent, null)
 }
