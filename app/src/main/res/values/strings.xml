@@ -7,4 +7,14 @@
     <string name="activity_description">Activity Description</string>
     <string name="share_activity">Share Activity</string>
     <string name="add_activity">Add Activity</string>
+
+    <string name="user_shared_preferences">usernameLoggedPref</string>
+    <string name="user_logged_shared_pref">userLogged</string>
+    <string name="username_shared_pref">usernameLogged</string>
+
+    <string name="first_name_text">Nome</string>
+    <string name="last_name_text">Cognome</string>
+    <string name="email_text">Email</string>
+    <string name="username_text">Username</string>
+    <string name="password_text">Password</string>
 </resources>

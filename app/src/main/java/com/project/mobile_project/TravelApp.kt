@@ -210,8 +210,8 @@ private fun logout(sharedPreferences: SharedPreferences, context: Context) {
     val loginIntent = Intent(context, LoginScreen::class.java)
     loginIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 
-    editor.putBoolean("userLogged", false)
-    editor.putString("usernameLogged", "")
+    editor.putBoolean(context.getString(R.string.user_logged_shared_pref), false)
+    editor.putString(context.getString(R.string.username_shared_pref), "")
     editor.apply()
 
     startActivity(context, loginIntent, null)

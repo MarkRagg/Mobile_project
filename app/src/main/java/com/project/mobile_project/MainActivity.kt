@@ -21,11 +21,10 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    val USERNAME_LOGGED_PREF = "usernameLoggedPref"
     private val settingsViewModel: SettingsViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val sharedPreferences: SharedPreferences = getSharedPreferences(USERNAME_LOGGED_PREF, Context.MODE_PRIVATE)
+        val sharedPreferences: SharedPreferences = getSharedPreferences(getString(R.string.user_shared_preferences), Context.MODE_PRIVATE)
 
         setContent {
             val theme by settingsViewModel.theme.collectAsState(initial = "")
@@ -37,7 +36,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 
-                    if(sharedPreferences.getBoolean("userLogged", false)) {
+                    if(sharedPreferences.getBoolean(getString(R.string.user_logged_shared_pref), false)) {
                         NavigationApp(sharedPreferences = sharedPreferences, context = applicationContext)
                     } else {
                         NavigationApp(sharedPreferences = sharedPreferences, context = applicationContext)
