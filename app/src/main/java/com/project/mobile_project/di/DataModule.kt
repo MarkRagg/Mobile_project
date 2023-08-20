@@ -2,6 +2,7 @@ package com.project.mobile_project.di
 
 import android.content.Context
 import androidx.room.Room
+import com.project.mobile_project.data.ActivityDAO
 import com.project.mobile_project.data.AppDatabase
 import com.project.mobile_project.data.SettingsRepository
 import com.project.mobile_project.data.UserDAO
@@ -24,6 +25,11 @@ object DataModule {
     @Provides
     fun provideUserDao(database: AppDatabase): UserDAO {
         return database.UserDAO()
+    }
+
+    @Provides
+    fun provideActivityDao(database: AppDatabase): ActivityDAO {
+        return database.ActivityDAO()
     }
 
     @Singleton

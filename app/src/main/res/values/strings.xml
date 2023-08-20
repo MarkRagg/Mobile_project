@@ -6,4 +6,5 @@
     <string name="activity_title">Activity Title</string>
     <string name="activity_description">Activity Description</string>
     <string name="share_activity">Share Activity</string>
+    <string name="add_activity">Add Activity</string>
 </resources>

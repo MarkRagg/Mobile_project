@@ -5,9 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.mobile_project.data.Activity
 import com.project.mobile_project.data.ActivityRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class ActivitiesViewModel @Inject constructor(
     private val repository: ActivityRepository
 ): ViewModel() {

@@ -40,8 +40,9 @@ class MainActivity : ComponentActivity() {
                     if(sharedPreferences.getBoolean("userLogged", false)) {
                         NavigationApp(sharedPreferences = sharedPreferences, context = applicationContext)
                     } else {
-                        val i = Intent(applicationContext, LoginScreen::class.java)
-                        startActivity(i)
+                        NavigationApp(sharedPreferences = sharedPreferences, context = applicationContext)
+                        //val i = Intent(applicationContext, LoginScreen::class.java)
+                        //startActivity(i)
                     }
                 }
             }

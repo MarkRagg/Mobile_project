@@ -28,7 +28,7 @@ fun DetailsScreen(activitiesViewModel: ActivitiesViewModel) {
                 Icon(Icons.Filled.Share, contentDescription = stringResource(id = R.string.share_activity))
             }
         }
-            ){ paddingValues ->
+    ) { paddingValues ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
