@@ -26,6 +26,9 @@ interface UserDAO {
     @Query("SELECT * FROM user WHERE username = :usernameSelected AND password = :passwordSelected")
     fun getUserFromUsernameAndPassw(usernameSelected: String, passwordSelected: String): Flow<User>
 
+    @Query("SELECT * FROM user WHERE username = :usernameSelected")
+    fun getUserFromUsername(usernameSelected: String): Flow<User>
+
     /*@Transaction
     @Query("SELECT user.* FROM activity, user WHERE userCreatorId = username")
     suspend fun getUserFromActivity(): User

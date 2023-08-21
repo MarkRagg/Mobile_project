@@ -11,7 +11,7 @@ data class User (
     var email: String,
     var password: String,
     var salt: String?,
-    var profileImg: String
+    var profileImg: String?
 )
 
 @Entity(tableName = "activity")

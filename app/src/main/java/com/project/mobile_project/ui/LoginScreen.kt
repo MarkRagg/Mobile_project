@@ -27,6 +27,8 @@ import androidx.compose.ui.unit.sp
 import com.project.mobile_project.data.User
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.LifecycleOwner
 import com.project.mobile_project.MainActivity
@@ -106,7 +108,13 @@ class LoginScreen: ComponentActivity() {
 
                         Row {
                             Button(
-                                onClick = { insertNewUser(username, password, usersViewModel, users, activity)
+                                onClick = { login(
+                                    username = username,
+                                    password = password,
+                                    viewModel = usersViewModel,
+                                    lifecycleOwner = activity,
+                                    context = activity,
+                                    sharedPreferences = sharedPreferences)
                                         //insertNewActivity()
                                 },
 
@@ -122,7 +130,10 @@ class LoginScreen: ComponentActivity() {
                             }
                             ClickableText(
                                 text = AnnotatedString("Registrati ora.."),
-                                onClick = { goingToRegistrationScreen(activity) }
+                                onClick = { goingToRegistrationScreen(activity) },
+                                style = TextStyle(
+                                    textAlign = TextAlign.End
+                                )
                             )
                         }
                     }

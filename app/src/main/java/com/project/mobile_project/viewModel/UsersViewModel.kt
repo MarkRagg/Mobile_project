@@ -42,6 +42,12 @@ class UsersViewModel @Inject constructor(private val repository: UserRepository)
         }
     }
 
+    fun getUser(username: String) = viewModelScope.launch {
+        repository.getUserFromUsername(username).collect {
+            userLiveData.postValue(it)
+        }
+    }
+
     private var _userSelected: User? = null
     val userSelected
         get() = _userSelected

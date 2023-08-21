@@ -157,7 +157,7 @@ private fun registerNewUser(firstName: String, lastName: String, username: Strin
         email = email,
         password = password,
         salt = null,
-        profileImg = "a"
+        profileImg = null
     )
 
     viewModel.getUserFromUsername(username, password)

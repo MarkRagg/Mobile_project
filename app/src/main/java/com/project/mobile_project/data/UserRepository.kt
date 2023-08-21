@@ -38,6 +38,11 @@ class UserRepository @Inject constructor(private val userDAO: UserDAO) {
         return userDAO.getUserFromUsernameAndPassw(usernameSelected, passwordSelected)
     }
 
+    @WorkerThread
+    fun getUserFromUsername(usernameSelected: String): Flow<User> {
+        return userDAO.getUserFromUsername(usernameSelected)
+    }
+
     /*@WorkerThread
     suspend fun getUserFromActivity() {
         userDAO.getUserFromActivity()
