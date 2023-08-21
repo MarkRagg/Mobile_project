@@ -20,6 +20,9 @@ interface UserDAO {
     @Query("DELETE FROM user")
     suspend fun deleteAll()
 
+    @Query("UPDATE user SET profileImg = :profileImg WHERE username = :username")
+    suspend fun updateProfileImg(username: String, profileImg: String)
+
     @Query("SELECT * FROM user WHERE username = :usernameSelected AND password = :passwordSelected")
     fun getUserFromUsernameAndPassw(usernameSelected: String, passwordSelected: String): Flow<User>
 

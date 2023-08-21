@@ -30,10 +30,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import com.project.mobile_project.utilities.createImageFile
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.project.mobile_project.R
+import com.project.mobile_project.utilities.createImageFile
 import com.project.mobile_project.utilities.saveImage
 import com.project.mobile_project.viewModel.UsersViewModel
 import java.util.*
@@ -105,7 +105,7 @@ fun ProfileScreen(usersViewModel: UsersViewModel?) {
                 modifier = imageModifier,
                 contentScale = ContentScale.Crop,
             )
-            photoURI = saveImage(context.applicationContext.contentResolver, capturedImageUri)
+            user?.username?.let { usersViewModel.updateProfileImg(it, saveImage(context.applicationContext.contentResolver, capturedImageUri)) }
         } else if (user?.profileImg?.isEmpty() == null /*true*/) {
             Image(
                 painter = painterResource(id = R.drawable.baseline_android_24),

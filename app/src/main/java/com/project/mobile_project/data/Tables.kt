@@ -1,6 +1,7 @@
 package com.project.mobile_project.data
 
 import androidx.room.*
+import java.util.*
 
 @Entity(tableName = "user")
 data class User (
@@ -10,12 +11,12 @@ data class User (
     var email: String,
     var password: String,
     var salt: String?,
-    var profileImg: String // TODO: convert in Bitmap or Blob
+    var profileImg: String
 )
 
 @Entity(tableName = "activity")
 data class Activity(
-    @PrimaryKey var activityId: String,
+    @PrimaryKey val activityId: String = UUID.randomUUID().toString(),
     var userCreatorUsername: String,
     var name: String,
     var description: String?,

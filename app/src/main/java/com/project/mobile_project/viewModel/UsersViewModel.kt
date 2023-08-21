@@ -32,6 +32,10 @@ class UsersViewModel @Inject constructor(private val repository: UserRepository)
         repository.deleteAllUser()
     }
 
+    fun updateProfileImg(username: String, profileImg: String) = viewModelScope.launch {
+        repository.updateProfileImg(username, profileImg)
+    }
+
     fun getUserFromUsername(username: String, password: String) = viewModelScope.launch {
         repository.getUserFromUsernameAndPassw(username, password).collect {
             userLiveData.postValue(it)

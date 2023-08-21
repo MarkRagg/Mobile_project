@@ -33,7 +33,9 @@ import com.project.mobile_project.data.User
 import com.project.mobile_project.ui.theme.Mobile_projectTheme
 import com.project.mobile_project.viewModel.SettingsViewModel
 import com.project.mobile_project.viewModel.UsersViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RegistrationScreen: ComponentActivity() {
     private val settingsViewModel: SettingsViewModel by viewModels()
     private val usersViewModel: UsersViewModel by viewModels()

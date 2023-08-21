@@ -1,5 +1,7 @@
 package com.project.mobile_project.ui
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -41,9 +43,12 @@ fun HomeScreen(
 fun ActivitiesList(onItemClicked: () -> Unit, activitiesViewModel: ActivitiesViewModel) {
     val activities = activitiesViewModel.allActivities.collectAsState(initial = listOf()).value
     val context = LocalContext.current
+    val sharedPreferences: SharedPreferences = context.getSharedPreferences("usernameLoggedPref", Context.MODE_PRIVATE)
+
+
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { /* TODO: Apri Registra screen */ }) {
+            FloatingActionButton(onClick = { insertNewActivity(sharedPreferences, context)/* TODO: Apri Registra screen */ }) {
                 Icon(
                     Icons.Filled.Add,
                     contentDescription = stringResource(id = R.string.add_activity)

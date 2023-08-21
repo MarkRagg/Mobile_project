@@ -31,6 +31,7 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.LifecycleOwner
 import com.project.mobile_project.MainActivity
 import com.project.mobile_project.R
+import com.project.mobile_project.data.Activity
 import com.project.mobile_project.ui.theme.Mobile_projectTheme
 import com.project.mobile_project.viewModel.SettingsViewModel
 import com.project.mobile_project.viewModel.UsersViewModel
@@ -38,92 +39,132 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class LoginScreen: ComponentActivity() {
-  private val settingsViewModel: SettingsViewModel by viewModels()
-  private val usersViewModel: UsersViewModel by viewModels()
-  private val activity = this
+    private val settingsViewModel: SettingsViewModel by viewModels()
+    private val usersViewModel: UsersViewModel by viewModels()
+    private val activity = this
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    val sharedPreferences: SharedPreferences = getSharedPreferences(getString(R.string.user_shared_preferences), Context.MODE_PRIVATE)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val sharedPreferences: SharedPreferences = getSharedPreferences(getString(R.string.user_shared_preferences), Context.MODE_PRIVATE)
 
-      setContent {
-      val theme by settingsViewModel.theme.collectAsState(initial = "")
-      Mobile_projectTheme(darkTheme = theme == "Dark") {
+        setContent {
+            val theme by settingsViewModel.theme.collectAsState(initial = "")
+            Mobile_projectTheme(darkTheme = theme == "Dark") {
+                val users = usersViewModel.allUsers.collectAsState(initial = listOf()).value
 
-        // A surface container using the 'background' color from the theme
-        Surface(
-          modifier = Modifier.fillMaxSize(),
-          color = MaterialTheme.colorScheme.background
-        ) {
-          Column (
-            modifier = Modifier
-                .padding(all = 12.dp)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-          ) {
-              var username by rememberSaveable { mutableStateOf("") }
-              var password by rememberSaveable { mutableStateOf("") }
-              var passwordVisible by rememberSaveable { mutableStateOf(false) }
+                // A surface container using the 'background' color from the theme
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    Column (
+                    modifier = Modifier
+                        .padding(all = 12.dp)
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        var username by rememberSaveable { mutableStateOf("") }
+                        var password by rememberSaveable { mutableStateOf("") }
+                        var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
-              Text(
-                text = "Accedi",
-                fontSize = 20.sp,
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
-                textAlign = TextAlign.Center
-              )
-              OutlinedTextField(
-                value = username,
-                onValueChange = { newText: String -> username = newText },
-                label = { Text(getString(R.string.username_text)) },
-                placeholder = { Text(getString(R.string.username_text)) }
-              )
-              OutlinedTextField(
-                value = password,
-                onValueChange = { newText: String -> password = newText },
-                label = { Text(getString(R.string.password_text)) },
-                placeholder = { Text(getString(R.string.password_text)) },
-                singleLine = true,
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                trailingIcon = {
-                  val image = if (passwordVisible)
-                    Icons.Filled.Visibility
-                  else Icons.Filled.VisibilityOff
+                        Text(
+                            text = "Accedi",
+                            fontSize = 20.sp,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer,
+                            textAlign = TextAlign.Center
+                        )
+                        OutlinedTextField(
+                            value = username,
+                            onValueChange = { newText: String -> username = newText },
+                            label = { Text(getString(R.string.username_text)) },
+                            placeholder = { Text(getString(R.string.username_text)) }
+                        )
+                        OutlinedTextField(
+                            value = password,
+                            onValueChange = { newText: String -> password = newText },
+                            label = { Text(getString(R.string.password_text)) },
+                            placeholder = { Text(getString(R.string.password_text)) },
+                            singleLine = true,
+                            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                            trailingIcon = {
+                                val image = if (passwordVisible)
+                                Icons.Filled.Visibility
+                                else Icons.Filled.VisibilityOff
 
-                  // Please provide localized description for accessibility services
-                  val description = if (passwordVisible) "Hide password" else "Show password"
+                                // Please provide localized description for accessibility services
+                                val description = if (passwordVisible) "Hide password" else "Show password"
 
-                  IconButton(onClick = {passwordVisible = !passwordVisible}){
-                    Icon(imageVector  = image, description)
-                  }
+                                IconButton(onClick = {passwordVisible = !passwordVisible}){
+                                    Icon(imageVector  = image, description)
+                                }
+                            }
+                        )
+
+                        Spacer(modifier = Modifier.padding(5.dp))
+
+                        Row {
+                            Button(
+                                onClick = { insertNewUser(username, password, usersViewModel, users, activity)
+                                        //insertNewActivity()
+                                },
+
+                                // Uses ButtonDefaults.ContentPadding by default
+                                contentPadding = PaddingValues(
+                                  start = 20.dp,
+                                  top = 12.dp,
+                                  end = 20.dp,
+                                  bottom = 12.dp
+                                )
+                            ) {
+                                Text("Login")
+                            }
+                            ClickableText(
+                                text = AnnotatedString("Registrati ora.."),
+                                onClick = { goingToRegistrationScreen(activity) }
+                            )
+                        }
+                    }
                 }
-              )
-              Spacer(modifier = Modifier.padding(5.dp))
-              Row {
-                  Button(
-                      onClick = { login(username, password, usersViewModel, activity, activity, sharedPreferences) },
-
-                      // Uses ButtonDefaults.ContentPadding by default
-                      contentPadding = PaddingValues(
-                          start = 20.dp,
-                          top = 12.dp,
-                          end = 20.dp,
-                          bottom = 12.dp
-                      )
-                  ) {
-                      Text("Login")
-                  }
-                  ClickableText(
-                      text = AnnotatedString("Registrati ora.."),
-                      onClick = { goingToRegistrationScreen(activity) }
-                  )
-              }
-          }
+            }
         }
-      }
     }
-  }
+}
+
+private fun insertNewUser(username: String, password: String, usersViewModel: UsersViewModel, users: List<User>, context: Context) {
+    val newUser = User(
+        firstName = "Marco",
+        lastName = "Raggini",
+        username = username,
+        email = "a",
+        password = password,
+        salt = null,
+        profileImg = "a"
+    )
+
+    val userInDb = userExist(users, username)
+    if(userInDb != null) {
+        Toast.makeText(context, "Username già usato!", Toast.LENGTH_LONG).show()
+    } else {
+        usersViewModel.insertUser(newUser)
+    }
+}
+
+fun insertNewActivity(sharedPreferences: SharedPreferences, context: Context) {
+    val userCreator = sharedPreferences.getString(context.getString(R.string.username_shared_pref), "")?.let {
+        Activity(
+        userCreatorUsername = it,
+        name = "Attività di prova",
+        description = "La descriptiones es mas importante" ,
+        totalTime = 2,
+        distance = 50,
+        speed = 20 ,
+        pace = null,
+        steps = null,
+        onFoot = null
+        )
+    }
 }
 
 private fun login(username: String, password: String, viewModel: UsersViewModel, lifecycleOwner: LifecycleOwner, context: Context, sharedPreferences: SharedPreferences) {

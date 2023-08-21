@@ -29,6 +29,11 @@ class UserRepository @Inject constructor(private val userDAO: UserDAO) {
     }
 
     @WorkerThread
+    suspend fun updateProfileImg(username: String, profileImg: String) {
+        userDAO.updateProfileImg(username, profileImg)
+    }
+
+    @WorkerThread
     fun getUserFromUsernameAndPassw(usernameSelected: String, passwordSelected: String): Flow<User> {
         return userDAO.getUserFromUsernameAndPassw(usernameSelected, passwordSelected)
     }
