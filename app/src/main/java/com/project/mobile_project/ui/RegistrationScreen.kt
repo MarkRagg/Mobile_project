@@ -24,7 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.project.mobile_project.MainActivity
@@ -68,36 +70,36 @@ class RegistrationScreen: ComponentActivity() {
                         var password by rememberSaveable { mutableStateOf("") }
                         var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
-                        Row {
-                            OutlinedTextField(
-                                value = firstName,
-                                onValueChange = { newText: String -> firstName = newText },
-                                label = { Text(getString(R.string.first_name_text)) },
-                                placeholder = { Text(getString(R.string.first_name_text)) }
-                            )
-                            OutlinedTextField(
-                                value = lastName,
-                                onValueChange = { newText: String -> lastName = newText },
-                                label = { Text(getString(R.string.last_name_text)) },
-                                placeholder = { Text(getString(R.string.last_name_text)) }
-                            )
-                        }
-
-                        Row {
-                            OutlinedTextField(
-                                value = email,
-                                onValueChange = { newText: String -> email = newText },
-                                label = { Text(getString(R.string.email_text)) },
-                                placeholder = { Text(getString(R.string.email_text)) }
-                            )
-                            OutlinedTextField(
-                                value = username,
-                                onValueChange = { newText: String -> username = newText },
-                                label = { Text(getString(R.string.username_text)) },
-                                placeholder = { Text(getString(R.string.username_text)) }
-                            )
-                        }
-
+                        Text(
+                            text = "Accedi",
+                            fontSize = 20.sp,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer,
+                            textAlign = TextAlign.Center
+                        )
+                        OutlinedTextField(
+                            value = firstName,
+                            onValueChange = { newText: String -> firstName = newText },
+                            label = { Text(getString(R.string.first_name_text)) },
+                            placeholder = { Text(getString(R.string.first_name_text)) }
+                        )
+                        OutlinedTextField(
+                            value = lastName,
+                            onValueChange = { newText: String -> lastName = newText },
+                            label = { Text(getString(R.string.last_name_text)) },
+                            placeholder = { Text(getString(R.string.last_name_text)) }
+                        )
+                        OutlinedTextField(
+                            value = email,
+                            onValueChange = { newText: String -> email = newText },
+                            label = { Text(getString(R.string.email_text)) },
+                            placeholder = { Text(getString(R.string.email_text)) }
+                        )
+                        OutlinedTextField(
+                            value = username,
+                            onValueChange = { newText: String -> username = newText },
+                            label = { Text(getString(R.string.username_text)) },
+                            placeholder = { Text(getString(R.string.username_text)) }
+                        )
                         OutlinedTextField(
                             value = password,
                             onValueChange = { newText: String -> password = newText },

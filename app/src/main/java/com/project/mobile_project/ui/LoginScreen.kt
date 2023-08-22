@@ -26,9 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.project.mobile_project.data.User
 import androidx.compose.runtime.*
+import androidx.compose.ui.layout.HorizontalAlignmentLine
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.LifecycleOwner
 import com.project.mobile_project.MainActivity
@@ -106,15 +105,19 @@ class LoginScreen: ComponentActivity() {
 
                         Spacer(modifier = Modifier.padding(5.dp))
 
-                        Row {
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
                             Button(
+                                modifier = Modifier.align(alignment = Alignment.CenterVertically),
                                 onClick = { login(
                                     username = username,
                                     password = password,
                                     viewModel = usersViewModel,
                                     lifecycleOwner = activity,
                                     context = activity,
-                                    sharedPreferences = sharedPreferences)
+                                    sharedPreferences = sharedPreferences,
+                                )
                                         //insertNewActivity()
                                 },
 
@@ -128,12 +131,11 @@ class LoginScreen: ComponentActivity() {
                             ) {
                                 Text("Login")
                             }
+                            Spacer(modifier = Modifier.padding(20.dp))
                             ClickableText(
                                 text = AnnotatedString("Registrati ora.."),
                                 onClick = { goingToRegistrationScreen(activity) },
-                                style = TextStyle(
-                                    textAlign = TextAlign.End
-                                )
+                                modifier = Modifier.align(alignment = Alignment.Bottom)
                             )
                         }
                     }
