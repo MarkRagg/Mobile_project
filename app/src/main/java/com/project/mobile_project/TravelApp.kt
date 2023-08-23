@@ -26,6 +26,7 @@ import com.project.mobile_project.data.AppDatabase
 import com.project.mobile_project.ui.*
 import com.project.mobile_project.viewModel.ActivitiesViewModel
 import com.project.mobile_project.viewModel.SettingsViewModel
+import com.project.mobile_project.viewModel.UsersViewModel
 import dagger.hilt.android.HiltAndroidApp
 import java.security.AccessController.getContext
 
@@ -169,7 +170,7 @@ private fun NavigationGraph(
     innerPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
-    val usersViewModel = null // hiltViewModel<UsersViewModel>()
+    val usersViewModel = hiltViewModel<UsersViewModel>()
     val activitiesVieModel = hiltViewModel<ActivitiesViewModel>()
     NavHost(
         navController = navController,
@@ -196,7 +197,7 @@ private fun NavigationGraph(
             //AddScreen { navController.popBackStack(AppScreen.Home.name, inclusive = false) }
         }
         composable(route = AppScreen.Profile.name) {
-            ProfileScreen(usersViewModel = null)
+            ProfileScreen(usersViewModel = usersViewModel)
         }
         composable(route = AppScreen.Settings.name) {
             val settingsViewModel = hiltViewModel<SettingsViewModel>()

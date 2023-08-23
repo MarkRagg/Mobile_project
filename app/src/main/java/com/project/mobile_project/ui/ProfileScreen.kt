@@ -3,6 +3,7 @@ package com.project.mobile_project.ui
 import android.Manifest
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -43,6 +44,7 @@ fun ProfileScreen(usersViewModel: UsersViewModel?) {
 
     var photoURI by rememberSaveable { mutableStateOf("") }
     val user = usersViewModel?.userSelected
+    Log.d("DEBUG", user.toString())
     val imageModifier = Modifier
         .size(200.dp)
         .border(

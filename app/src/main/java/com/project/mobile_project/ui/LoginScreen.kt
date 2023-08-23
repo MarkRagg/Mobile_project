@@ -34,6 +34,7 @@ import com.project.mobile_project.MainActivity
 import com.project.mobile_project.R
 import com.project.mobile_project.data.Activity
 import com.project.mobile_project.ui.theme.Mobile_projectTheme
+import com.project.mobile_project.viewModel.ActivitiesViewModel
 import com.project.mobile_project.viewModel.SettingsViewModel
 import com.project.mobile_project.viewModel.UsersViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -164,18 +165,20 @@ private fun insertNewUser(username: String, password: String, usersViewModel: Us
     }
 }
 
-fun insertNewActivity(sharedPreferences: SharedPreferences, context: Context) {
+fun insertNewActivity(sharedPreferences: SharedPreferences, context: Context, activitiesViewModel: ActivitiesViewModel) {
     val userCreator = sharedPreferences.getString(context.getString(R.string.username_shared_pref), "")?.let {
-        Activity(
-        userCreatorUsername = it,
-        name = "Attività di prova",
-        description = "La descriptiones es mas importante" ,
-        totalTime = 2,
-        distance = 50,
-        speed = 20 ,
-        pace = null,
-        steps = null,
-        onFoot = null
+        activitiesViewModel.insertActivity(
+            Activity(
+                userCreatorUsername = it,
+                name = "Attività di prova",
+                description = "La descriptiones es mas importante" ,
+                totalTime = 2,
+                distance = 50,
+                speed = 20 ,
+                pace = null,
+                steps = null,
+                onFoot = null
+            )
         )
     }
 }

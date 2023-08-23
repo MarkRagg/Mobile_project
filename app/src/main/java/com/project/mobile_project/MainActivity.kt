@@ -39,9 +39,8 @@ class MainActivity : ComponentActivity() {
                     if(sharedPreferences.getBoolean(getString(R.string.user_logged_shared_pref), false)) {
                         NavigationApp(sharedPreferences = sharedPreferences, context = applicationContext)
                     } else {
-                        NavigationApp(sharedPreferences = sharedPreferences, context = applicationContext)
-                        //val i = Intent(applicationContext, LoginScreen::class.java)
-                        //startActivity(i)
+                        val i = Intent(applicationContext, LoginScreen::class.java)
+                        startActivity(i)
                     }
                 }
             }

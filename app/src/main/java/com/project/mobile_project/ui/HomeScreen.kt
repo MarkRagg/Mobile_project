@@ -48,7 +48,7 @@ fun ActivitiesList(onItemClicked: () -> Unit, activitiesViewModel: ActivitiesVie
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { insertNewActivity(sharedPreferences, context)/* TODO: Apri Registra screen */ }) {
+            FloatingActionButton(onClick = { insertNewActivity(sharedPreferences, context, activitiesViewModel)/* TODO: Apri Registra screen */ }) {
                 Icon(
                     Icons.Filled.Add,
                     contentDescription = stringResource(id = R.string.add_activity)
