@@ -164,13 +164,13 @@ private fun registerNewUser(firstName: String, lastName: String, username: Strin
 
     viewModel.getUserFromUsername(username, password)
     viewModel.userLiveData.observe(lifecycleOwner) {
-        if(it == null) {
+        if(it != null) {
+            Toast.makeText(context, "Username già esistente!", Toast.LENGTH_LONG).show()
+        } else {
             saveLoggedUser(username, sharedPreferences, context)
             viewModel.insertUser(newUser)
             val homeIntent = Intent(context, MainActivity::class.java)
             ContextCompat.startActivity(context, homeIntent, null)
-        } else {
-            Toast.makeText(context, "Username già esistente!", Toast.LENGTH_LONG).show()
         }
     }
 }

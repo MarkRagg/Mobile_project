@@ -146,25 +146,6 @@ class LoginScreen: ComponentActivity() {
     }
 }
 
-private fun insertNewUser(username: String, password: String, usersViewModel: UsersViewModel, users: List<User>, context: Context) {
-    val newUser = User(
-        firstName = "Marco",
-        lastName = "Raggini",
-        username = username,
-        email = "a",
-        password = password,
-        salt = null,
-        profileImg = "a"
-    )
-
-    val userInDb = userExist(users, username)
-    if(userInDb != null) {
-        Toast.makeText(context, "Username già usato!", Toast.LENGTH_LONG).show()
-    } else {
-        usersViewModel.insertUser(newUser)
-    }
-}
-
 fun insertNewActivity(sharedPreferences: SharedPreferences, context: Context, activitiesViewModel: ActivitiesViewModel) {
     val userCreator = sharedPreferences.getString(context.getString(R.string.username_shared_pref), "")?.let {
         activitiesViewModel.insertActivity(
