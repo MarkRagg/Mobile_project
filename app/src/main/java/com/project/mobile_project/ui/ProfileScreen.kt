@@ -1,6 +1,7 @@
 package com.project.mobile_project.ui
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.util.Log
@@ -34,16 +35,19 @@ import androidx.core.content.FileProvider
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.project.mobile_project.R
+import com.project.mobile_project.data.User
 import com.project.mobile_project.utilities.createImageFile
 import com.project.mobile_project.utilities.saveImage
 import com.project.mobile_project.viewModel.UsersViewModel
 import java.util.*
 
 @Composable
-fun ProfileScreen(usersViewModel: UsersViewModel?) {
+fun ProfileScreen(usersViewModel: UsersViewModel) {
 
+    val context = LocalContext.current
     var photoURI by rememberSaveable { mutableStateOf("") }
-    val user = usersViewModel?.userSelected
+    val sharedPreferences = context.getSharedPreferences(context.getString(R.string.user_shared_preferences), Context.MODE_PRIVATE)
+    val user = getUser(usersViewModel.allUsers.collectAsState(initial = listOf()).value, sharedPreferences.getString(context.getString(R.string.username_shared_pref), ""))
     Log.d("DEBUG", user.toString())
     val imageModifier = Modifier
         .size(200.dp)
@@ -119,7 +123,7 @@ fun ProfileScreen(usersViewModel: UsersViewModel?) {
         } else {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(Uri.parse(user?.profileImg))
+                    .data(Uri.parse(user.profileImg))
                     .crossfade(true)
                     .build(),
                 contentDescription = "profile img",
@@ -172,5 +176,14 @@ fun ProfileScreen(usersViewModel: UsersViewModel?) {
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyMedium,
         )
+    }
+}
+
+private fun getUser(users: List<User>, username: String?): User? {
+    val optionalUser = users.stream().filter {x -> x.username == username}.findFirst()
+    return if(optionalUser.isPresent) {
+        optionalUser.get()
+    } else {
+        null
     }
 }
