@@ -3,6 +3,7 @@ package com.project.mobile_project.ui
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.provider.CalendarContract
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -12,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.EditCalendar
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -57,6 +59,16 @@ fun ActivitiesList(onItemClicked: () -> Unit, activitiesViewModel: ActivitiesVie
                 Icon(
                     Icons.Filled.Add,
                     contentDescription = stringResource(id = R.string.add_activity)
+                )
+            }
+            FloatingActionButton(onClick = { context.startActivity(Intent(Intent.ACTION_INSERT )
+                .setData(CalendarContract.Events.CONTENT_URI)
+                .putExtra(CalendarContract.Events.TITLE, "Corsa")
+                .putExtra(CalendarContract.Events.ALL_DAY, false)
+                .putExtra(CalendarContract.Events.DESCRIPTION, "corsa introduttiva")) }) {
+                Icon(
+                    Icons.Filled.EditCalendar,
+                    contentDescription = stringResource(id = R.string.add_calendar_event)
                 )
             }
         }
