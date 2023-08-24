@@ -1,6 +1,7 @@
 package com.project.mobile_project.ui
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -21,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import com.project.mobile_project.R
 import com.project.mobile_project.viewModel.ActivitiesViewModel
 
@@ -48,7 +50,10 @@ fun ActivitiesList(onItemClicked: () -> Unit, activitiesViewModel: ActivitiesVie
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { insertNewActivity(sharedPreferences, context, activitiesViewModel)/* TODO: Apri Registra screen */ }) {
+            FloatingActionButton(onClick = {
+                val trackingIntent = Intent(context, TrackingActivity::class.java)
+                ContextCompat.startActivity(context, trackingIntent, null)
+            }) {
                 Icon(
                     Icons.Filled.Add,
                     contentDescription = stringResource(id = R.string.add_activity)

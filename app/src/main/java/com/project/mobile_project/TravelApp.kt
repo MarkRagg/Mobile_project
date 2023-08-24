@@ -14,7 +14,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -193,8 +195,8 @@ private fun NavigationGraph(
             //LoginScreen()
         }
         composable(route = AppScreen.Record.name) {
-            // HomeScreen("REGISTRAAAAAAAAAA")
-            //AddScreen { navController.popBackStack(AppScreen.Home.name, inclusive = false) }
+            val trackingIntent = Intent(LocalContext.current, TrackingActivity::class.java)
+            ContextCompat.startActivity(LocalContext.current, trackingIntent, null)
         }
         composable(route = AppScreen.Profile.name) {
             ProfileScreen(usersViewModel = usersViewModel)

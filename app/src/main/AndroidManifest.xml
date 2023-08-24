@@ -35,6 +35,9 @@
         <activity android:name="com.project.mobile_project.ui.RegistrationScreen"
             android:theme="@style/Theme.Mobile_project" >
         </activity>
+        <activity android:name="com.project.mobile_project.ui.TrackingActivity"
+            android:theme="@style/Theme.Mobile_project" >
+        </activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -45,6 +48,14 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/path_provider" />
         </provider>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
     </application>
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
 
 </manifest>
