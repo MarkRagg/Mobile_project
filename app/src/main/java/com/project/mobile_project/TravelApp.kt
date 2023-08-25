@@ -173,7 +173,7 @@ private fun NavigationGraph(
     modifier: Modifier = Modifier
 ) {
     val usersViewModel = hiltViewModel<UsersViewModel>()
-    val activitiesVieModel = hiltViewModel<ActivitiesViewModel>()
+    val activitiesViewModel = hiltViewModel<ActivitiesViewModel>()
     NavHost(
         navController = navController,
         startDestination = AppScreen.Home.name,
@@ -184,11 +184,11 @@ private fun NavigationGraph(
                 onItemClicked = {
                     navController.navigate(AppScreen.Details.name)
                 },
-                activitiesViewModel = activitiesVieModel
+                activitiesViewModel = activitiesViewModel
             )
         }
         composable(route = AppScreen.Details.name) {
-            DetailsScreen(activitiesViewModel = activitiesVieModel)
+            DetailsScreen(activitiesViewModel = activitiesViewModel)
         }
         composable(route = AppScreen.Login.name) {
             //AddScreen { navController.popBackStack(AppScreen.Home.name, inclusive = false) }

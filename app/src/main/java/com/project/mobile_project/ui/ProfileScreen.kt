@@ -109,7 +109,7 @@ fun ProfileScreen(usersViewModel: UsersViewModel) {
                     .build(),
                 contentDescription = "image taken",
                 modifier = imageModifier,
-                contentScale = ContentScale.Crop,
+                contentScale = ContentScale.Crop
             )
             user?.username?.let { usersViewModel.updateProfileImg(it, saveImage(context.applicationContext.contentResolver, capturedImageUri)) }
         } else if (user?.profileImg?.isEmpty() == null /*true*/) {
@@ -127,7 +127,8 @@ fun ProfileScreen(usersViewModel: UsersViewModel) {
                     .crossfade(true)
                     .build(),
                 contentDescription = "profile img",
-                modifier = imageModifier
+                modifier = imageModifier,
+                contentScale = ContentScale.Crop
             )
         }
 

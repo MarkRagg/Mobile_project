@@ -83,7 +83,7 @@
         app:layout_constraintStart_toEndOf="@+id/txtPaceLabel"
         app:layout_constraintTop_toTopOf="@+id/txtPaceLabel" />
 
-    <TextView
+    <Chronometer
         android:id="@+id/txtTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

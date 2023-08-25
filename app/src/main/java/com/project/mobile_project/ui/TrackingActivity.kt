@@ -1,24 +1,36 @@
 package com.project.mobile_project.ui
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.SystemClock
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolylineOptions
 import com.project.mobile_project.databinding.ActivityMapsBinding
 import com.project.mobile_project.R
+import com.project.mobile_project.data.Activity
 import com.project.mobile_project.utilities.LocationProvider
+import com.project.mobile_project.utilities.MapPresenter
 import com.project.mobile_project.utilities.PermissionsManager
+import com.project.mobile_project.utilities.Ui
+import com.project.mobile_project.viewModel.ActivitiesViewModel
 
 class TrackingActivity : AppCompatActivity(), OnMapReadyCallback {
 
+    //private val sharedPreferences: SharedPreferences = context.getSharedPreferences("usernameLoggedPref", Context.MODE_PRIVATE)
     private lateinit var map: GoogleMap
     private lateinit var binding: ActivityMapsBinding
-    private val locationProvider = LocationProvider(this)
-    private val permissionManager = PermissionsManager(this, locationProvider)
+    private val presenter = MapPresenter(this)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +45,18 @@ class TrackingActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        binding.btnStartStop.setOnClickListener {
+            if (binding.btnStartStop.text == getString(R.string.start_label)) {
+                startTracking()
+                binding.btnStartStop.setText(R.string.stop_label)
+            } else {
+                stopTracking()
+                binding.btnStartStop.setText(R.string.start_label)
+            }
+        }
+
+        presenter.onViewCreated()
     }
 
     /**
@@ -47,13 +71,70 @@ class TrackingActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
 
-        locationProvider.liveLocation.observe(this) { latLng ->
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14f))
+        presenter.ui.observe(this) { ui ->
+            updateUi(ui)
         }
 
-        permissionManager.requestUserLocation()
-
+        presenter.onMapLoaded()
         map.uiSettings.isZoomControlsEnabled = true
     }
 
+    private fun startTracking() {
+        binding.container.txtPace.text = ""
+        binding.container.txtDistance.text = ""
+        binding.container.txtTime.base = SystemClock.elapsedRealtime()
+        binding.container.txtTime.start()
+        map.clear()
+
+        presenter.startTracking()
+    }
+
+    private fun stopTracking() {
+        /*val context = LocalContext.current
+        val activitiesViewModel = hiltViewModel<ActivitiesViewModel>()*/
+        presenter.stopTracking()
+        binding.container.txtTime.stop()
+        //insertNewActivity(sharedPreferences, context, activitiesViewModel)
+    }
+
+    fun insertNewActivity(sharedPreferences: SharedPreferences, context: Context, activitiesViewModel: ActivitiesViewModel) {
+        val userCreator = sharedPreferences.getString(context.getString(R.string.username_shared_pref), "")?.let {
+            activitiesViewModel.insertActivity(
+                Activity(
+                    userCreatorUsername = it,
+                    name = "Attività di prova",
+                    description = "La descriptiones es mas importante" ,
+                    totalTime = 2,
+                    distance = 50,
+                    speed = 20 ,
+                    pace = null,
+                    steps = null,
+                    onFoot = null
+                )
+            )
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun updateUi(ui: Ui) {
+        if (ui.currentLocation != null && ui.currentLocation != map.cameraPosition.target) {
+            map.isMyLocationEnabled = true
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(ui.currentLocation, 14f))
+        }
+        binding.container.txtDistance.text = ui.formattedDistance
+        binding.container.txtPace.text = ui.formattedPace
+
+        drawRoute(ui.userPath)
+    }
+
+    private fun drawRoute(locations: List<LatLng>) {
+        val polylineOptions = PolylineOptions()
+
+        map.clear()
+
+        val points = polylineOptions.points
+        points.addAll(locations)
+
+        map.addPolyline(polylineOptions)
+    }
 }
