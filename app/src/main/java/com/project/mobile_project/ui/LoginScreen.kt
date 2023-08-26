@@ -15,24 +15,26 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.project.mobile_project.data.User
-import androidx.compose.runtime.*
-import androidx.compose.ui.layout.HorizontalAlignmentLine
-import androidx.compose.ui.text.AnnotatedString
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.LifecycleOwner
 import com.project.mobile_project.MainActivity
 import com.project.mobile_project.R
 import com.project.mobile_project.data.Activity
+import com.project.mobile_project.data.User
 import com.project.mobile_project.ui.theme.Mobile_projectTheme
 import com.project.mobile_project.viewModel.ActivitiesViewModel
 import com.project.mobile_project.viewModel.SettingsViewModel
@@ -169,7 +171,7 @@ private fun login(username: String, password: String, viewModel: UsersViewModel,
   viewModel.userLiveData.observe(lifecycleOwner) {
     if(it != null) {
         saveLoggedUser(username, sharedPreferences, context)
-        val homeIntent = Intent(context, MainActivity::class.java)
+        val homeIntent = Intent(context, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(context, homeIntent, null)
     } else {
         Toast.makeText(context, "Username o password sbagliata!", Toast.LENGTH_LONG).show()
@@ -198,6 +200,6 @@ fun saveLoggedUser(username: String, sharedPreferences: SharedPreferences, conte
 }
 
 private fun goingToRegistrationScreen(context: Context) {
-    val registrationIntent = Intent(context, RegistrationScreen::class.java)
+    val registrationIntent = Intent(context, RegistrationScreen::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
     startActivity(context, registrationIntent, null)
 }

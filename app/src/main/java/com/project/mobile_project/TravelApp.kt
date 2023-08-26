@@ -1,8 +1,7 @@
 package com.project.mobile_project
 
+import android.app.Activity
 import android.app.Application
-import android.app.PendingIntent.getActivity
-import android.app.SharedElementCallback
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -30,7 +29,6 @@ import com.project.mobile_project.viewModel.ActivitiesViewModel
 import com.project.mobile_project.viewModel.SettingsViewModel
 import com.project.mobile_project.viewModel.UsersViewModel
 import dagger.hilt.android.HiltAndroidApp
-import java.security.AccessController.getContext
 
 @HiltAndroidApp
 class TravelApp : Application() {
@@ -136,7 +134,8 @@ fun BottomAppBarFunction(
 fun NavigationApp(
     navController: NavHostController = rememberNavController(),
     sharedPreferences: SharedPreferences,
-    context: Context
+    context: Context,
+    activity: Activity
 ) {
     // Get current back stack entry
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -150,7 +149,7 @@ fun NavigationApp(
                 canNavigateBack = navController.previousBackStackEntry != null,
                 navigateUp = { navController.navigateUp() },
                 onSettingsButtonClicked = {navController.navigate(AppScreen.Settings.name)},
-                onLogoutButtonClicked = {logout(sharedPreferences, context)}
+                onLogoutButtonClicked = {logout(sharedPreferences, context, activity)}
             )
         },
         bottomBar = {
@@ -208,14 +207,15 @@ private fun NavigationGraph(
     }
 }
 
-private fun logout(sharedPreferences: SharedPreferences, context: Context) {
+private fun logout(sharedPreferences: SharedPreferences, context: Context, activity: Activity) {
     val editor: SharedPreferences.Editor = sharedPreferences.edit()
     val loginIntent = Intent(context, LoginScreen::class.java)
-    loginIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+    loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
 
     editor.putBoolean(context.getString(R.string.user_logged_shared_pref), false)
     editor.putString(context.getString(R.string.username_shared_pref), "")
     editor.apply()
 
     startActivity(context, loginIntent, null)
+    activity.finish()
 }

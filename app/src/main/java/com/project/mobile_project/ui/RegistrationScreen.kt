@@ -169,7 +169,7 @@ private fun registerNewUser(firstName: String, lastName: String, username: Strin
         } else {
             saveLoggedUser(username, sharedPreferences, context)
             viewModel.insertUser(newUser)
-            val homeIntent = Intent(context, MainActivity::class.java)
+            val homeIntent = Intent(context, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
             ContextCompat.startActivity(context, homeIntent, null)
         }
     }

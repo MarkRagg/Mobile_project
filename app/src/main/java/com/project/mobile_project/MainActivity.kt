@@ -35,12 +35,12 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-
                     if(sharedPreferences.getBoolean(getString(R.string.user_logged_shared_pref), false)) {
-                        NavigationApp(sharedPreferences = sharedPreferences, context = applicationContext)
+                        NavigationApp(sharedPreferences = sharedPreferences, context = applicationContext, activity = this)
                     } else {
-                        val i = Intent(applicationContext, LoginScreen::class.java)
+                        val i = Intent(applicationContext, LoginScreen::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(i)
+                        this.finish()
                     }
                 }
             }
