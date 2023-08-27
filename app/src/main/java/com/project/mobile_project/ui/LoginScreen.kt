@@ -148,24 +148,6 @@ class LoginScreen: ComponentActivity() {
     }
 }
 
-fun insertNewActivity(sharedPreferences: SharedPreferences, context: Context, activitiesViewModel: ActivitiesViewModel) {
-    val userCreator = sharedPreferences.getString(context.getString(R.string.username_shared_pref), "")?.let {
-        activitiesViewModel.insertActivity(
-            Activity(
-                userCreatorUsername = it,
-                name = "Attività di prova",
-                description = "La descriptiones es mas importante" ,
-                totalTime = 2,
-                distance = 50,
-                speed = 20 ,
-                pace = null,
-                steps = null,
-                onFoot = null
-            )
-        )
-    }
-}
-
 private fun login(username: String, password: String, viewModel: UsersViewModel, lifecycleOwner: LifecycleOwner, context: Context, sharedPreferences: SharedPreferences) {
   viewModel.getUserFromUsername(username, password)
   viewModel.userLiveData.observe(lifecycleOwner) {

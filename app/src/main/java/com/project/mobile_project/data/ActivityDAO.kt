@@ -20,6 +20,9 @@ interface ActivityDAO {
     @Query("DELETE FROM activity")
     suspend fun deleteAll()
 
+    @Query("UPDATE activity SET name = :name WHERE activityId = :activityId")
+    suspend fun updateActivityName(activityId: String, name: String)
+
     @Transaction
     @Query("SELECT * FROM activity WHERE userCreatorUsername = :usernameSelected")
     fun getActivitiesFromUser(usernameSelected: String): Flow<List<Activity>>

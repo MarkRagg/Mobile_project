@@ -7,7 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.model.LatLng
 import com.project.mobile_project.R
 import com.project.mobile_project.data.Activity
+import com.project.mobile_project.ui.DetailsScreen
 import com.project.mobile_project.viewModel.ActivitiesViewModel
+import kotlin.math.round
 
 class MapPresenter(private val activity: AppCompatActivity) {
 
@@ -30,12 +32,12 @@ class MapPresenter(private val activity: AppCompatActivity) {
         locationProvider.liveDistance.observe(activity) { distance ->
             val current = ui.value
             val formattedDistance = activity.getString(R.string.distance_value, distance)
-            ui.value = current?.copy(formattedDistance = formattedDistance)
+            ui.value = current?.copy(formattedDistance = formattedDistance, distance = distance)
         }
 
         stepCounter.liveSteps.observe(activity) { steps ->
             val current = ui.value
-            ui.value = current?.copy(formattedPace = "$steps")
+            ui.value = current?.copy(formattedSteps = "$steps")
         }
     }
 
@@ -48,24 +50,36 @@ class MapPresenter(private val activity: AppCompatActivity) {
         permissionsManager.requestActivityRecognition()
     }
 
-    fun stopTracking(context: Context, activitiesViewModel: ActivitiesViewModel, sharedPreferences: SharedPreferences, time: Long) {
+    fun stopTracking(
+        context: Context,
+        sharedPreferences: SharedPreferences,
+        activitiesViewModel: ActivitiesViewModel,
+        elapsedTime: Long
+    ) {
         locationProvider.stopTracking()
         stepCounter.unloadStepCounter()
-
-        val distance = ui.value?.formattedDistance?.toInt()
-        val speed = distance?.div(time.toInt())
+        insertNewActivity(context, sharedPreferences, activitiesViewModel, elapsedTime)
+    }
+    private fun insertNewActivity(
+        context: Context,
+        sharedPreferences: SharedPreferences,
+        activitiesViewModel: ActivitiesViewModel,
+        elapsedTime: Long
+    ) {
+        val distance = ui.value?.distance
+        val speed = distance?.div(elapsedTime.toDouble())?.let { round(it * 10) / 10 }
 
         sharedPreferences.getString(context.getString(R.string.username_shared_pref), "")?.let {
             activitiesViewModel.insertActivity(
                 Activity(
                     userCreatorUsername = it,
-                    name = "Attività SERIA",
-                    description = "LELEelelle",
-                    totalTime = time,
+                    name = null,
+                    description = null,
+                    totalTime = elapsedTime,
                     distance = distance!!,
                     speed = speed!!,
                     pace = null,
-                    steps = ui.value?.formattedPace?.toInt(),
+                    steps = ui.value?.formattedSteps?.toInt(),
                     onFoot = null
                 )
             )
@@ -73,26 +87,10 @@ class MapPresenter(private val activity: AppCompatActivity) {
     }
 }
 
-fun insertNewActivity(sharedPreferences: SharedPreferences, context: Context, activitiesViewModel: ActivitiesViewModel) {
-    val userCreator = sharedPreferences.getString(context.getString(R.string.username_shared_pref), "")?.let {
-        activitiesViewModel.insertActivity(
-            Activity(
-                userCreatorUsername = it,
-                name = "Attività di prova",
-                description = "La descriptiones es mas importante" ,
-                totalTime = 2,
-                distance = 50,
-                speed = 20 ,
-                pace = null,
-                steps = null,
-                onFoot = null
-            )
-        )
-    }
-}
 
 data class Ui(
-    val formattedPace: String,
+    val formattedSteps: String,
+    val distance: Int,
     val formattedDistance: String,
     val currentLocation: LatLng?,
     val userPath: List<LatLng>
@@ -101,7 +99,8 @@ data class Ui(
     companion object {
 
         val EMPTY = Ui(
-            formattedPace = "",
+            formattedSteps = "",
+            distance = 0,
             formattedDistance = "",
             currentLocation = null,
             userPath = emptyList()

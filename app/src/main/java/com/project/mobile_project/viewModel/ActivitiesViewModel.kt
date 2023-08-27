@@ -33,6 +33,10 @@ class ActivitiesViewModel @Inject constructor(
         repository.deleteAllActivities()
     }
 
+    fun updateActivityName(activityId: String, name: String) = viewModelScope.launch {
+        repository.updateActivityName(activityId, name)
+    }
+
     fun getActivitiesFromUsername(username: String) = viewModelScope.launch {
         repository.getActivitiesFromUser(username).collect {
             activityLiveData.postValue(it)

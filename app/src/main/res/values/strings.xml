@@ -19,6 +19,9 @@
     <string name="username_text">Username</string>
     <string name="password_text">Password</string>
 
+    <string name="title">Titolo</string>
+    <string name="description">Descrizione</string>
+
     <string name="title_activity_maps">Map</string>
     <string name="steps">Steps</string>
     <string name="elapsed_time_label">Elapsed time</string>

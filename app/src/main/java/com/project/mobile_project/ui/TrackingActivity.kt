@@ -25,7 +25,9 @@ import com.project.mobile_project.utilities.MapPresenter
 import com.project.mobile_project.utilities.PermissionsManager
 import com.project.mobile_project.utilities.Ui
 import com.project.mobile_project.viewModel.ActivitiesViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TrackingActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var map: GoogleMap
@@ -33,7 +35,7 @@ class TrackingActivity : AppCompatActivity(), OnMapReadyCallback {
     private val presenter = MapPresenter(this)
     private val activitiesViewModel: ActivitiesViewModel by viewModels()
 
-    fun onCreate(savedInstanceState: Bundle?, context: Context) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_Mobile_project)
 
         super.onCreate(savedInstanceState)
@@ -51,9 +53,11 @@ class TrackingActivity : AppCompatActivity(), OnMapReadyCallback {
                 startTracking()
                 binding.btnStartStop.setText(R.string.stop_label)
             } else {
-                val sharedPreferences: SharedPreferences = context.getSharedPreferences("usernameLoggedPref", Context.MODE_PRIVATE)
+                val context = this
+                val sharedPreferences: SharedPreferences =
+                    context.getSharedPreferences("usernameLoggedPref", Context.MODE_PRIVATE)
 
-                stopTracking(context = context, activitiesViewModel, sharedPreferences)
+                stopTracking(context, activitiesViewModel, sharedPreferences)
                 binding.btnStartStop.setText(R.string.start_label)
             }
         }
@@ -91,9 +95,14 @@ class TrackingActivity : AppCompatActivity(), OnMapReadyCallback {
         presenter.startTracking()
     }
 
-    private fun stopTracking(context: Context, activitiesViewModel: ActivitiesViewModel, sharedPreferences: SharedPreferences) {
-        presenter.stopTracking(context, activitiesViewModel, sharedPreferences, binding.container.txtTime.base)
+    private fun stopTracking(
+        context: Context,
+        activitiesViewModel: ActivitiesViewModel,
+        sharedPreferences: SharedPreferences
+    ) {
         binding.container.txtTime.stop()
+        val elapsedTime = (SystemClock.elapsedRealtime() - binding.container.txtTime.base) / 1000
+        presenter.stopTracking(context, sharedPreferences, activitiesViewModel, elapsedTime)
     }
 
     @SuppressLint("MissingPermission")
@@ -103,7 +112,7 @@ class TrackingActivity : AppCompatActivity(), OnMapReadyCallback {
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(ui.currentLocation, 14f))
         }
         binding.container.txtDistance.text = ui.formattedDistance
-        binding.container.txtPace.text = ui.formattedPace
+        binding.container.txtPace.text = ui.formattedSteps
 
         drawRoute(ui.userPath)
     }

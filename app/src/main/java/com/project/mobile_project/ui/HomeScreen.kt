@@ -76,7 +76,7 @@ fun ActivitiesList(onItemClicked: () -> Unit, activitiesViewModel: ActivitiesVie
         LazyVerticalGrid(
             columns = GridCells.Fixed(1),
             content = {
-                items(items = activities) { activity ->
+                items(items = activities.reversed()) { activity ->
                     Card(
                         onClick = {
                             activitiesViewModel.selectActivity(activity)
@@ -99,13 +99,15 @@ fun ActivitiesList(onItemClicked: () -> Unit, activitiesViewModel: ActivitiesVie
                         ) {
                             val scroll = rememberScrollState(0)
 
-                            Text(
-                                text = activity.name,
-                                fontSize = 15.sp,
-                                color = MaterialTheme.colorScheme.onSecondaryContainer,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.verticalScroll(scroll)
-                            )
+                            activity.name?.let {
+                                Text(
+                                    text = it,
+                                    fontSize = 17.sp,
+                                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                    textAlign = TextAlign.Left,
+                                    modifier = Modifier.verticalScroll(scroll)
+                                )
+                            }
                         }
                     }
                 }

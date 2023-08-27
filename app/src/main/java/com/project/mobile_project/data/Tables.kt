@@ -18,11 +18,11 @@ data class User (
 data class Activity(
     @PrimaryKey val activityId: String = UUID.randomUUID().toString(),
     var userCreatorUsername: String,
-    var name: String,
+    var name: String?,
     var description: String?,
     var totalTime: Long,
     var distance: Int,
-    var speed: Int,
+    var speed: Double,
     var pace: Int?,
     var steps: Int?,
     var onFoot: Boolean?
