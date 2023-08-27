@@ -11,7 +11,7 @@
         android:id="@+id/imgPace"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/average_pace_label"
+        android:contentDescription="@string/steps"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_pace"/>
@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:fontFamily="sans-serif-smallcaps"
-        android:text="@string/average_pace_label"
+        android:text="@string/steps"
         app:layout_constraintBottom_toBottomOf="@+id/imgPace"
         app:layout_constraintStart_toEndOf="@+id/imgPace"
         app:layout_constraintTop_toTopOf="@+id/imgPace" />

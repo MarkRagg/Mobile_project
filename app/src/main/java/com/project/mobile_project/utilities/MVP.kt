@@ -1,9 +1,13 @@
 package com.project.mobile_project.utilities
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.model.LatLng
 import com.project.mobile_project.R
+import com.project.mobile_project.data.Activity
+import com.project.mobile_project.viewModel.ActivitiesViewModel
 
 class MapPresenter(private val activity: AppCompatActivity) {
 
@@ -44,9 +48,46 @@ class MapPresenter(private val activity: AppCompatActivity) {
         permissionsManager.requestActivityRecognition()
     }
 
-    fun stopTracking() {
+    fun stopTracking(context: Context, activitiesViewModel: ActivitiesViewModel, sharedPreferences: SharedPreferences, time: Long) {
         locationProvider.stopTracking()
         stepCounter.unloadStepCounter()
+
+        val distance = ui.value?.formattedDistance?.toInt()
+        val speed = distance?.div(time.toInt())
+
+        sharedPreferences.getString(context.getString(R.string.username_shared_pref), "")?.let {
+            activitiesViewModel.insertActivity(
+                Activity(
+                    userCreatorUsername = it,
+                    name = "Attività SERIA",
+                    description = "LELEelelle",
+                    totalTime = time,
+                    distance = distance!!,
+                    speed = speed!!,
+                    pace = null,
+                    steps = ui.value?.formattedPace?.toInt(),
+                    onFoot = null
+                )
+            )
+        }
+    }
+}
+
+fun insertNewActivity(sharedPreferences: SharedPreferences, context: Context, activitiesViewModel: ActivitiesViewModel) {
+    val userCreator = sharedPreferences.getString(context.getString(R.string.username_shared_pref), "")?.let {
+        activitiesViewModel.insertActivity(
+            Activity(
+                userCreatorUsername = it,
+                name = "Attività di prova",
+                description = "La descriptiones es mas importante" ,
+                totalTime = 2,
+                distance = 50,
+                speed = 20 ,
+                pace = null,
+                steps = null,
+                onFoot = null
+            )
+        )
     }
 }
 

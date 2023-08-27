@@ -54,6 +54,32 @@ fun DetailsScreen(activitiesViewModel: ActivitiesViewModel) {
 
                 Spacer(modifier = Modifier.size(15.dp))
             }
+
+            Text(
+                text = "Tempo totale: " + selectedActivity?.totalTime, //?: stringResource(id = R.string.elapsed_time_label),
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                style = MaterialTheme.typography.bodySmall
+            )
+
+                Spacer(modifier = Modifier.size(15.dp))
+
+            Text(
+                text = "Distanza: " + selectedActivity?.distance,
+                    //?: stringResource(id = R.string.distance_label),
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                style = MaterialTheme.typography.bodySmall
+            )
+
+            Spacer(modifier = Modifier.size(15.dp))
+
+            Text(
+                text = "Velocità: " + selectedActivity?.speed,
+                    //?: stringResource(id = "Speed"),
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                style = MaterialTheme.typography.bodySmall
+            )
+
+            Spacer(modifier = Modifier.size(15.dp))
         }
     }
 }

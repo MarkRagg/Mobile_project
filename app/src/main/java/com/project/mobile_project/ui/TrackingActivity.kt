@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.SystemClock
+import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -27,13 +28,12 @@ import com.project.mobile_project.viewModel.ActivitiesViewModel
 
 class TrackingActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    //private val sharedPreferences: SharedPreferences = context.getSharedPreferences("usernameLoggedPref", Context.MODE_PRIVATE)
     private lateinit var map: GoogleMap
     private lateinit var binding: ActivityMapsBinding
     private val presenter = MapPresenter(this)
+    private val activitiesViewModel: ActivitiesViewModel by viewModels()
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
+    fun onCreate(savedInstanceState: Bundle?, context: Context) {
         setTheme(R.style.Theme_Mobile_project)
 
         super.onCreate(savedInstanceState)
@@ -51,7 +51,9 @@ class TrackingActivity : AppCompatActivity(), OnMapReadyCallback {
                 startTracking()
                 binding.btnStartStop.setText(R.string.stop_label)
             } else {
-                stopTracking()
+                val sharedPreferences: SharedPreferences = context.getSharedPreferences("usernameLoggedPref", Context.MODE_PRIVATE)
+
+                stopTracking(context = context, activitiesViewModel, sharedPreferences)
                 binding.btnStartStop.setText(R.string.start_label)
             }
         }
@@ -89,30 +91,9 @@ class TrackingActivity : AppCompatActivity(), OnMapReadyCallback {
         presenter.startTracking()
     }
 
-    private fun stopTracking() {
-        /*val context = LocalContext.current
-        val activitiesViewModel = hiltViewModel<ActivitiesViewModel>()*/
-        presenter.stopTracking()
+    private fun stopTracking(context: Context, activitiesViewModel: ActivitiesViewModel, sharedPreferences: SharedPreferences) {
+        presenter.stopTracking(context, activitiesViewModel, sharedPreferences, binding.container.txtTime.base)
         binding.container.txtTime.stop()
-        //insertNewActivity(sharedPreferences, context, activitiesViewModel)
-    }
-
-    fun insertNewActivity(sharedPreferences: SharedPreferences, context: Context, activitiesViewModel: ActivitiesViewModel) {
-        val userCreator = sharedPreferences.getString(context.getString(R.string.username_shared_pref), "")?.let {
-            activitiesViewModel.insertActivity(
-                Activity(
-                    userCreatorUsername = it,
-                    name = "Attività di prova",
-                    description = "La descriptiones es mas importante" ,
-                    totalTime = 2,
-                    distance = 50,
-                    speed = 20 ,
-                    pace = null,
-                    steps = null,
-                    onFoot = null
-                )
-            )
-        }
     }
 
     @SuppressLint("MissingPermission")
