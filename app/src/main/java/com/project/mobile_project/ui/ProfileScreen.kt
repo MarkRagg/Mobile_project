@@ -112,6 +112,7 @@ fun ProfileScreen(usersViewModel: UsersViewModel) {
                 contentScale = ContentScale.Crop
             )
             user?.username?.let { usersViewModel.updateProfileImg(it, saveImage(context.applicationContext.contentResolver, capturedImageUri)) }
+            capturedImageUri = Uri.EMPTY
         } else if (user?.profileImg?.isEmpty() == null /*true*/) {
             Image(
                 painter = painterResource(id = R.drawable.baseline_android_24),
