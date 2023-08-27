@@ -93,6 +93,14 @@ fun TopAppBarFunction(
                     )
                 }
             }
+            if(currentScreen == AppScreen.Home.name) {
+                IconButton(onClick = onLogoutButtonClicked) {
+                    Icon(
+                        Icons.Filled.FilterAlt,
+                        contentDescription = "Filter"
+                    )
+                }
+            }
         },
         colors = TopAppBarDefaults.smallTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer

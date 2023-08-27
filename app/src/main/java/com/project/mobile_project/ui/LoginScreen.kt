@@ -161,18 +161,6 @@ private fun login(username: String, password: String, viewModel: UsersViewModel,
   }
 }
 
-private fun userExist(users: List<User>, username: String): User?{
-  var exist: User? = null
-
-  for(user in users) {
-    if(user.username == username) {
-      exist = user
-    }
-  }
-
-  return exist
-}
-
 fun saveLoggedUser(username: String, sharedPreferences: SharedPreferences, context: Context) {
     val editor: SharedPreferences.Editor = sharedPreferences.edit()
 
