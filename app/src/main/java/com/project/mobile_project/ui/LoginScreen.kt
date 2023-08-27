@@ -148,24 +148,6 @@ class LoginScreen: ComponentActivity() {
     }
 }
 
-fun insertNewActivity(sharedPreferences: SharedPreferences, context: Context, activitiesViewModel: ActivitiesViewModel) {
-    val userCreator = sharedPreferences.getString(context.getString(R.string.username_shared_pref), "")?.let {
-        activitiesViewModel.insertActivity(
-            Activity(
-                userCreatorUsername = it,
-                name = "Attività di prova",
-                description = "La descriptiones es mas importante" ,
-                totalTime = 2,
-                distance = 50,
-                speed = 20 ,
-                pace = null,
-                steps = null,
-                onFoot = null
-            )
-        )
-    }
-}
-
 private fun login(username: String, password: String, viewModel: UsersViewModel, lifecycleOwner: LifecycleOwner, context: Context, sharedPreferences: SharedPreferences) {
   viewModel.getUserFromUsername(username, password)
   viewModel.userLiveData.observe(lifecycleOwner) {
@@ -177,18 +159,6 @@ private fun login(username: String, password: String, viewModel: UsersViewModel,
         Toast.makeText(context, "Username o password sbagliata!", Toast.LENGTH_LONG).show()
     }
   }
-}
-
-private fun userExist(users: List<User>, username: String): User?{
-  var exist: User? = null
-
-  for(user in users) {
-    if(user.username == username) {
-      exist = user
-    }
-  }
-
-  return exist
 }
 
 fun saveLoggedUser(username: String, sharedPreferences: SharedPreferences, context: Context) {
