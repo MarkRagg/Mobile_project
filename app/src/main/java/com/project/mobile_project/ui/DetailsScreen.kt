@@ -4,21 +4,26 @@ package com.project.mobile_project.ui
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.project.mobile_project.R
 import com.project.mobile_project.data.Activity
 import com.project.mobile_project.viewModel.ActivitiesViewModel
@@ -28,7 +33,15 @@ import com.project.mobile_project.viewModel.ActivitiesViewModel
 fun DetailsScreen(activitiesViewModel: ActivitiesViewModel) {
     val context = LocalContext.current
     val selectedActivity = activitiesViewModel.activitySelected
+    val details = listOf(
+        "Tempo totale: " + selectedActivity!!.totalTime + " secondi",
+        "Distanza: " + selectedActivity!!.distance + " metri",
+        "Passo medio: " + selectedActivity!!.pace + " min/km",
+        "Velocità media: " + selectedActivity!!.speed + " km/h",
+        "Passi: " + selectedActivity!!.steps,
+    )
 
+    Log.d("DEBUG", details.toString())
     Scaffold (
         floatingActionButton = {
             FloatingActionButton(onClick = { shareDetails(context, selectedActivity) }) {
@@ -43,55 +56,53 @@ fun DetailsScreen(activitiesViewModel: ActivitiesViewModel) {
                 .padding(10.dp)
                 .fillMaxSize()
         ) {
-            var activityName by rememberSaveable { mutableStateOf(if(selectedActivity?.name?.isEmpty() == true) "" else selectedActivity?.name) }
+            var activityName by rememberSaveable { mutableStateOf(if (selectedActivity?.name?.isEmpty() == null) "" else selectedActivity?.name) }
 
-                TextField(
-                    value = activityName!!,
-                    onValueChange = { newText: String -> activityName = newText },
-                    label = { "Titolo" },
-                    placeholder = { if (activityName == null) "Titolo" else  selectedActivity?.name}
-                )
-
-            Spacer(modifier = Modifier.size(15.dp))
-
-            if (selectedActivity?.description?.isNotEmpty() == true) {
-                Text(
-                    text = selectedActivity?.description
-                        ?: stringResource(id = R.string.activity_description),
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-
-                Spacer(modifier = Modifier.size(15.dp))
-            }
-
-            Text(
-                text = "Tempo totale: " + selectedActivity?.totalTime + " secondi",
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                style = MaterialTheme.typography.bodyMedium
+            OutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(3.dp),
+                value = activityName!!,
+                onValueChange = { newText: String -> activityName = newText },
+                label = { Text("Titolo") },
+                placeholder = { if (activityName.isNullOrBlank()) Text("Titolo") else selectedActivity?.name }
+            )
+            
+            Spacer(modifier = Modifier.padding(5.dp))
+            
+            LazyVerticalGrid(columns = GridCells.Fixed(1),
+                content = {
+                    items(items = details) { info ->
+                        Card(
+                            modifier = Modifier
+                                .size(width = 100.dp, height = 80.dp)
+                                .padding(3.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.secondaryContainer
+                            )
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .padding(all = 12.dp)
+                                    .fillMaxSize(),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = info.toString(),
+                                    fontSize = 19.sp,
+                                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                    textAlign = TextAlign.Left,
+                                )
+                            }
+                        }
+                    }
+                }
             )
 
-                Spacer(modifier = Modifier.size(15.dp))
-
-            Text(
-                text = "Distanza: " + selectedActivity?.distance + " metri",
-                    //?: stringResource(id = R.string.distance_label),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                style = MaterialTheme.typography.bodyMedium
-            )
-
-            Spacer(modifier = Modifier.size(15.dp))
-
-            Text(
-                text = "Velocità: " + selectedActivity?.speed + " m/s",
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                style = MaterialTheme.typography.bodyMedium
-            )
-
-            Spacer(modifier = Modifier.size(15.dp))
+            Spacer(modifier = Modifier.padding(3.dp))
 
             Button(
-                //modifier = Modifier.align(alignment = Alignment.CenterVertically),
                 onClick = {
                     activityName?.let {
                         updateActivityTitle(

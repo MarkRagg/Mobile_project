@@ -23,7 +23,7 @@ data class Activity(
     var totalTime: Long,
     var distance: Int,
     var speed: Double,
-    var pace: Int?,
+    var pace: Double,
     var steps: Int?,
     var onFoot: Boolean?
 )

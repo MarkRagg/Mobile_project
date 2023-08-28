@@ -60,14 +60,17 @@ class MapPresenter(private val activity: AppCompatActivity) {
         stepCounter.unloadStepCounter()
         insertNewActivity(context, sharedPreferences, activitiesViewModel, elapsedTime)
     }
+
     private fun insertNewActivity(
         context: Context,
         sharedPreferences: SharedPreferences,
         activitiesViewModel: ActivitiesViewModel,
         elapsedTime: Long
     ) {
+        val time = elapsedTime.toDouble()
         val distance = ui.value?.distance
-        val speed = distance?.div(elapsedTime.toDouble())?.let { round(it * 10) / 10 }
+        val speed = (round(distance!! / time * 36) / 10)
+        val pace = (round(time / distance!! * 166.7) / 10)
 
         sharedPreferences.getString(context.getString(R.string.username_shared_pref), "")?.let {
             activitiesViewModel.insertActivity(
@@ -78,7 +81,7 @@ class MapPresenter(private val activity: AppCompatActivity) {
                     totalTime = elapsedTime,
                     distance = distance!!,
                     speed = speed!!,
-                    pace = null,
+                    pace = pace!!,
                     steps = ui.value?.formattedSteps?.toInt(),
                     onFoot = null
                 )
@@ -86,7 +89,6 @@ class MapPresenter(private val activity: AppCompatActivity) {
         }
     }
 }
-
 
 data class Ui(
     val formattedSteps: String,
