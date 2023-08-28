@@ -71,11 +71,14 @@ class RegistrationScreen: ComponentActivity() {
                         var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
                         Text(
-                            text = "Accedi",
+                            text = "Registrati",
                             fontSize = 20.sp,
                             color = MaterialTheme.colorScheme.onSecondaryContainer,
                             textAlign = TextAlign.Center
                         )
+
+                        Spacer(modifier = Modifier.padding(5.dp))
+
                         OutlinedTextField(
                             value = firstName,
                             onValueChange = { newText: String -> firstName = newText },
@@ -121,18 +124,26 @@ class RegistrationScreen: ComponentActivity() {
                                 }
                             }
                         )
-                        Spacer(modifier = Modifier.padding(5.dp))
+
+                        Spacer(modifier = Modifier.padding(3.dp))
+
                         Button(
-                            onClick = { registerNewUser(
-                                firstName = firstName,
-                                lastName = lastName,
-                                email = email,
-                                username = username,
-                                password = password,
-                                viewModel = usersViewModel,
-                                lifecycleOwner = activity,
-                                sharedPreferences = sharedPreferences,
-                                context = activity) },
+                            modifier = Modifier
+                                .fillMaxWidth(fraction = 0.8f)
+                                .padding(5.dp),
+                            onClick = {
+                                registerNewUser(
+                                    firstName = firstName,
+                                    lastName = lastName,
+                                    email = email,
+                                    username = username,
+                                    password = password,
+                                    viewModel = usersViewModel,
+                                    lifecycleOwner = activity,
+                                    sharedPreferences = sharedPreferences,
+                                    context = activity
+                                )
+                            },
 
                             // Uses ButtonDefaults.ContentPadding by default
                             contentPadding = PaddingValues(
@@ -143,6 +154,18 @@ class RegistrationScreen: ComponentActivity() {
                             )
                         ) {
                             Text("Registrati")
+                        }
+
+                        Spacer(modifier = Modifier.padding(2.dp))
+
+                        TextButton(
+                            onClick = {
+                                val registrationIntent = Intent(activity, LoginScreen::class.java)
+                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                                ContextCompat.startActivity(activity, registrationIntent, null)
+                            },
+                        ) {
+                            Text("Login")
                         }
                     }
                 }

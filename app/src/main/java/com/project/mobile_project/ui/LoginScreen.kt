@@ -9,7 +9,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -22,7 +21,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -33,10 +31,7 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.LifecycleOwner
 import com.project.mobile_project.MainActivity
 import com.project.mobile_project.R
-import com.project.mobile_project.data.Activity
-import com.project.mobile_project.data.User
 import com.project.mobile_project.ui.theme.Mobile_projectTheme
-import com.project.mobile_project.viewModel.ActivitiesViewModel
 import com.project.mobile_project.viewModel.SettingsViewModel
 import com.project.mobile_project.viewModel.UsersViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -78,6 +73,9 @@ class LoginScreen: ComponentActivity() {
                             color = MaterialTheme.colorScheme.onSecondaryContainer,
                             textAlign = TextAlign.Center
                         )
+
+                        Spacer(modifier = Modifier.padding(5.dp))
+
                         OutlinedTextField(
                             value = username,
                             onValueChange = { newText: String -> username = newText },
@@ -106,14 +104,14 @@ class LoginScreen: ComponentActivity() {
                             }
                         )
 
-                        Spacer(modifier = Modifier.padding(5.dp))
+                        Spacer(modifier = Modifier.padding(3.dp))
 
-                        Row(
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Button(
-                                modifier = Modifier.align(alignment = Alignment.CenterVertically),
-                                onClick = { login(
+                        Button(
+                            modifier = Modifier
+                                .fillMaxWidth(fraction = 0.8f)
+                                .padding(5.dp),
+                            onClick = {
+                                login(
                                     username = username,
                                     password = password,
                                     viewModel = usersViewModel,
@@ -121,25 +119,24 @@ class LoginScreen: ComponentActivity() {
                                     context = activity,
                                     sharedPreferences = sharedPreferences,
                                 )
-                                        //insertNewActivity()
-                                },
-
-                                // Uses ButtonDefaults.ContentPadding by default
-                                contentPadding = PaddingValues(
-                                  start = 20.dp,
-                                  top = 12.dp,
-                                  end = 20.dp,
-                                  bottom = 12.dp
-                                )
-                            ) {
-                                Text("Login")
-                            }
-                            Spacer(modifier = Modifier.padding(20.dp))
-                            ClickableText(
-                                text = AnnotatedString("Registrati ora.."),
-                                onClick = { goingToRegistrationScreen(activity) },
-                                modifier = Modifier.align(alignment = Alignment.Bottom)
+                            },
+                            // Uses ButtonDefaults.ContentPadding by default
+                            contentPadding = PaddingValues(
+                              start = 20.dp,
+                              top = 12.dp,
+                              end = 20.dp,
+                              bottom = 12.dp
                             )
+                        ) {
+                            Text("Login")
+                        }
+
+                        Spacer(modifier = Modifier.padding(2.dp))
+
+                        TextButton(
+                            onClick = { goingToRegistrationScreen(activity) },
+                        ) {
+                            Text("Registrati ora")
                         }
                     }
                 }

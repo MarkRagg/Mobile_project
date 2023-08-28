@@ -3,15 +3,11 @@ package com.project.mobile_project.ui
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.util.Log
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
@@ -112,8 +108,6 @@ fun DetailsScreen(activitiesViewModel: ActivitiesViewModel) {
                         )
                     }
                 },
-
-                // Uses ButtonDefaults.ContentPadding by default
                 contentPadding = PaddingValues(
                     start = 20.dp,
                     top = 12.dp,
