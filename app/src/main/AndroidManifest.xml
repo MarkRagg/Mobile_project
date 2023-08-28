@@ -38,6 +38,7 @@
             android:theme="@style/Theme.Mobile_project" >
         </activity>
         <activity android:name="com.project.mobile_project.ui.TrackingActivity"
+            android:launchMode="singleInstance"
             android:theme="@style/Theme.Mobile_project" >
         </activity>
 
