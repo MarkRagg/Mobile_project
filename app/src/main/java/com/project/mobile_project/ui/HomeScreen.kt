@@ -24,7 +24,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import com.project.mobile_project.R
+import com.project.mobile_project.data.Activity
 import com.project.mobile_project.viewModel.ActivitiesViewModel
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,15 +54,16 @@ fun ActivitiesList(onItemClicked: () -> Unit, activitiesViewModel: ActivitiesVie
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                val trackingIntent = Intent(context, TrackingActivity::class.java)
-                ContextCompat.startActivity(context, trackingIntent, null)
+                /*val trackingIntent = Intent(context, TrackingActivity::class.java)
+                ContextCompat.startActivity(context, trackingIntent, null)*/
+                insertAct(context, sharedPreferences, activitiesViewModel)
             }) {
                 Icon(
                     Icons.Filled.Add,
                     contentDescription = stringResource(id = R.string.add_activity)
                 )
             }
-            FloatingActionButton(onClick = { context.startActivity(Intent(Intent.ACTION_INSERT )
+            /*FloatingActionButton(onClick = { context.startActivity(Intent(Intent.ACTION_INSERT )
                 .setData(CalendarContract.Events.CONTENT_URI)
                 .putExtra(CalendarContract.Events.TITLE, "Corsa")
                 .putExtra(CalendarContract.Events.ALL_DAY, false)
@@ -68,7 +72,7 @@ fun ActivitiesList(onItemClicked: () -> Unit, activitiesViewModel: ActivitiesVie
                     Icons.Filled.EditCalendar,
                     contentDescription = stringResource(id = R.string.add_calendar_event)
                 )
-            }
+            }*/
         }
     ) { paddingValues ->
         LazyVerticalGrid(
@@ -81,51 +85,66 @@ fun ActivitiesList(onItemClicked: () -> Unit, activitiesViewModel: ActivitiesVie
                             onItemClicked()
                         },
                         modifier = Modifier
-                            .size(width = 150.dp, height = 150.dp)
-                            .padding(8.dp)
+                            .size(width = 150.dp, height = 120.dp)
+                            .padding(8.dp, 4.dp)
                             .fillMaxWidth(),
                         colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.secondaryContainer
                         )
                     ) {
-                        Column(
+                        Row(
                             modifier = Modifier
                                 .padding(all = 12.dp)
                                 .fillMaxSize(),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                            /*verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally*/
                         ) {
-                            val scroll = rememberScrollState(0)
+                            //val scroll = rememberScrollState(0)
 
-                            Box() {
-                                Row(
-                                    modifier = Modifier.fillMaxWidth()
-                                ) {
-                                    activity.name?.let {
-                                        Text(
-                                            text = it,
-                                            fontSize = 17.sp,
-                                            color = MaterialTheme.colorScheme.onSecondaryContainer,
-                                            textAlign = TextAlign.Center,
-                                            modifier = Modifier.weight(10f)
-                                                .verticalScroll(scroll)
-                                        )
-                                        FloatingActionButton(onClick = {
-                                            activitiesViewModel.updateActivityFavourite(activity.activityId, !(activity.favourite))
-                                        },
-                                        modifier = Modifier.weight(1f).align(alignment = Alignment.Bottom)
-                                            ) {
-                                            Icon(
-                                                if(activity.favourite) {
-                                                    Icons.Filled.Star
-                                                } else {
-                                                    Icons.Filled.StarBorder
-                                                },
-                                                contentDescription = stringResource(id = R.string.update_favourite)
-                                            )
-                                        }
-                                    }
+                            Column(
+                                modifier = Modifier
+                                    .padding(all = 12.dp)
+                                    .fillMaxSize(0.9f),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ){
+                                activity.name?.let {
+                                    Text(
+                                        text = it,
+                                        fontSize = 17.sp,
+                                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier.weight(10f),
+                                        style = MaterialTheme.typography.titleMedium
+                                    )
                                 }
+
+                                Text(
+                                    text = activity.date,
+                                    fontSize = 12.sp,
+                                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.weight(8f),
+                                    style = MaterialTheme.typography.bodySmall
+                                )
+                            }
+
+                            FloatingActionButton(
+                                onClick = {
+                                    activitiesViewModel.updateActivityFavourite(activity.activityId, !(activity.favourite))
+                                },
+                                modifier = Modifier.weight(1f)//.align(alignment = Alignment.Bottom)
+                            ) {
+                                Icon(
+                                    if(activity.favourite) {
+                                        Icons.Filled.Star
+                                    } else {
+                                        Icons.Filled.StarBorder
+                                    },
+                                    contentDescription = stringResource(id = R.string.update_favourite)
+                                )
                             }
                         }
                     }
@@ -133,4 +152,24 @@ fun ActivitiesList(onItemClicked: () -> Unit, activitiesViewModel: ActivitiesVie
             }
         )
     }
+
 }
+    fun insertAct(context: Context, sharedPreferences: SharedPreferences, activitiesViewModel: ActivitiesViewModel,) {
+        sharedPreferences.getString(context.getString(R.string.username_shared_pref), "")?.let {
+            activitiesViewModel.insertActivity(
+                Activity(
+                    userCreatorUsername = it,
+                    name = "Nuova attività",
+                    description = "Inserisci una descrizione",
+                    totalTime = 10,
+                    distance = 44,
+                    speed = 10.5,
+                    pace = 5.0,
+                    steps = 1000,
+                    onFoot = null,
+                    favourite = false,
+                    date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+                )
+            )
+        }
+    }

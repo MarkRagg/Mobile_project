@@ -37,7 +37,6 @@ fun DetailsScreen(activitiesViewModel: ActivitiesViewModel) {
         "Passi: " + selectedActivity!!.steps,
     )
 
-    Log.d("DEBUG", details.toString())
     Scaffold (
         floatingActionButton = {
             FloatingActionButton(onClick = { shareDetails(context, selectedActivity) }) {
@@ -65,7 +64,7 @@ fun DetailsScreen(activitiesViewModel: ActivitiesViewModel) {
             )
             
             Spacer(modifier = Modifier.padding(5.dp))
-            
+
             LazyVerticalGrid(columns = GridCells.Fixed(1),
                 content = {
                     items(items = details) { info ->
