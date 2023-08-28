@@ -144,6 +144,7 @@ class RegistrationScreen: ComponentActivity() {
                                     context = activity
                                 )
                             },
+                            enabled = canBeEnabled(firstName, lastName, email, username, password),
 
                             // Uses ButtonDefaults.ContentPadding by default
                             contentPadding = PaddingValues(
@@ -196,4 +197,8 @@ private fun registerNewUser(firstName: String, lastName: String, username: Strin
             ContextCompat.startActivity(context, homeIntent, null)
         }
     }
+}
+
+private fun canBeEnabled(firstName: String, lastName: String, email: String, username: String, password: String): Boolean {
+    return (firstName != "" && lastName != "" && email != "" && username != "" && password != "")
 }
