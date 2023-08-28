@@ -8,6 +8,7 @@
     <string name="share_activity">Share Activity</string>
     <string name="add_activity">Add Activity</string>
     <string name="add_calendar_event">Add Calendar Event</string>
+    <string name="update_favourite">Update Favourite</string>
 
     <string name="user_shared_preferences">usernameLoggedPref</string>
     <string name="user_logged_shared_pref">userLogged</string>

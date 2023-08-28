@@ -11,9 +11,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.EditCalendar
+import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -99,14 +97,35 @@ fun ActivitiesList(onItemClicked: () -> Unit, activitiesViewModel: ActivitiesVie
                         ) {
                             val scroll = rememberScrollState(0)
 
-                            activity.name?.let {
-                                Text(
-                                    text = it,
-                                    fontSize = 17.sp,
-                                    color = MaterialTheme.colorScheme.onSecondaryContainer,
-                                    textAlign = TextAlign.Left,
-                                    modifier = Modifier.verticalScroll(scroll)
-                                )
+                            Box() {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    activity.name?.let {
+                                        Text(
+                                            text = it,
+                                            fontSize = 17.sp,
+                                            color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                            textAlign = TextAlign.Center,
+                                            modifier = Modifier.weight(10f)
+                                                .verticalScroll(scroll)
+                                        )
+                                        FloatingActionButton(onClick = {
+                                            activitiesViewModel.updateActivityFavourite(activity.activityId, !(activity.favourite))
+                                        },
+                                        modifier = Modifier.weight(1f).align(alignment = Alignment.Bottom)
+                                            ) {
+                                            Icon(
+                                                if(activity.favourite) {
+                                                    Icons.Filled.Star
+                                                } else {
+                                                    Icons.Filled.StarBorder
+                                                },
+                                                contentDescription = stringResource(id = R.string.update_favourite)
+                                            )
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

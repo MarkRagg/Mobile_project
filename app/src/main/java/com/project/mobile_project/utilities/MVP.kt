@@ -7,8 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.model.LatLng
 import com.project.mobile_project.R
 import com.project.mobile_project.data.Activity
-import com.project.mobile_project.ui.DetailsScreen
 import com.project.mobile_project.viewModel.ActivitiesViewModel
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.math.round
 
 class MapPresenter(private val activity: AppCompatActivity) {
@@ -60,7 +61,6 @@ class MapPresenter(private val activity: AppCompatActivity) {
         stepCounter.unloadStepCounter()
         insertNewActivity(context, sharedPreferences, activitiesViewModel, elapsedTime)
     }
-
     private fun insertNewActivity(
         context: Context,
         sharedPreferences: SharedPreferences,
@@ -70,7 +70,8 @@ class MapPresenter(private val activity: AppCompatActivity) {
         val time = elapsedTime.toDouble()
         val distance = ui.value?.distance
         val speed = (round(distance!! / time * 36) / 10)
-        val pace = (round(time / distance!! * 166.7) / 10)
+        val pace = (round(time / distance * 166.7) / 10)
+        val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
 
         sharedPreferences.getString(context.getString(R.string.username_shared_pref), "")?.let {
             activitiesViewModel.insertActivity(
@@ -79,11 +80,13 @@ class MapPresenter(private val activity: AppCompatActivity) {
                     name = null,
                     description = null,
                     totalTime = elapsedTime,
-                    distance = distance!!,
-                    speed = speed!!,
-                    pace = pace!!,
+                    distance = distance,
+                    speed = speed,
+                    pace = pace,
                     steps = ui.value?.formattedSteps?.toInt(),
-                    onFoot = null
+                    onFoot = null,
+                    favourite = false,
+                    date = LocalDateTime.now().format(dateFormatter)
                 )
             )
         }

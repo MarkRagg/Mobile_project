@@ -43,6 +43,10 @@ class ActivitiesViewModel @Inject constructor(
         }
     }
 
+    fun updateActivityFavourite(activityId: String, favourite: Boolean) = viewModelScope.launch {
+        repository.updateActivityFavourite(activityId, favourite)
+    }
+
     private var _activitySelected: Activity? = null
     val activitySelected
         get() = _activitySelected
