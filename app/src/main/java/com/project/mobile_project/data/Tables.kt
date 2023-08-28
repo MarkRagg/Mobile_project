@@ -25,7 +25,9 @@ data class Activity(
     var speed: Double,
     var pace: Double,
     var steps: Int?,
-    var onFoot: Boolean?
+    var onFoot: Boolean?,
+    var favourite: Boolean,
+    var date: String
 )
 
 data class UserWithActivity(

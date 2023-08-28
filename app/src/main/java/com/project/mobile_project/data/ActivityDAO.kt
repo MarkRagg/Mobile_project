@@ -23,6 +23,9 @@ interface ActivityDAO {
     @Query("UPDATE activity SET name = :name WHERE activityId = :activityId")
     suspend fun updateActivityName(activityId: String, name: String)
 
+    @Query("UPDATE activity SET favourite = :favourite WHERE activityId = :activityId")
+    suspend fun updateActivityFavourite(activityId: String, favourite: Boolean)
+
     @Transaction
     @Query("SELECT * FROM activity WHERE userCreatorUsername = :usernameSelected")
     fun getActivitiesFromUser(usernameSelected: String): Flow<List<Activity>>
