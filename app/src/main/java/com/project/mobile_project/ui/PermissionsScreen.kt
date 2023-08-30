@@ -5,25 +5,29 @@ import android.content.Intent
 import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.net.NetworkInfo
 import android.os.Build
 import android.provider.Settings
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FindReplace
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import com.project.mobile_project.R
 
 @Composable
 fun PermissionsScreen(
     context: Context,
     //warningViewModel: WarningViewModel
 ) {
+    var gpsChecker by rememberSaveable { mutableStateOf(checkGPS(context)) }
     //if (!checkGPS(context)) {
         Column(
             modifier = Modifier
@@ -33,7 +37,7 @@ fun PermissionsScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "GPS is turned off but is needed to get the coordinates",
+                text = "Controlla che il GPS sia acceso! Il bottone per iniziare l'attività non sarà disponibile altrimenti!",
                 fontSize = 20.sp,
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
                 textAlign = TextAlign.Center,
@@ -51,7 +55,7 @@ fun PermissionsScreen(
                     }
                 }
             ) {
-                Text("Turn on the GPS")
+                Text("Attiva il GPS")
             }
 /*
             Spacer(modifier = Modifier.size(15.dp))
@@ -86,9 +90,17 @@ fun PermissionsScreen(
                     val trackingIntent = Intent(context, TrackingActivity::class.java)
                     ContextCompat.startActivity(context, trackingIntent, null)
                 },
-                enabled = checkGPS(context) // && checkInternet(context) TODO: live update
+                enabled = gpsChecker // && checkInternet(context) TODO: live update
             ) {
-                Text("Start Tracking")
+                Text("Inizia a correre")
+            }
+            Button(
+                onClick = { gpsChecker = checkGPS(context) }
+            ) {
+                Icon(
+                    Icons.Filled.FindReplace,
+                    contentDescription = stringResource(id = R.string.refresh_gps)
+                )
             }
         }
    /* } else {
