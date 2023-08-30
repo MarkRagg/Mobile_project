@@ -28,11 +28,11 @@ class LocationProvider(private val activity: AppCompatActivity) {
 //            while (location == null) {
 //              TODO: sleep activity
 //            }
-            var latLng = if (location == null) LatLng(43.5, 12.5)
-                else LatLng(location.latitude, location.longitude)
-
-            locations.add(latLng)
-            liveLocation.value = latLng
+            if( location != null) {
+                var latLng = LatLng(location.latitude, location.longitude)
+                locations.add(latLng)
+                liveLocation.value = latLng
+            }
         }
     }
 
