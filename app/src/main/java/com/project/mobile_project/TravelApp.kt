@@ -5,6 +5,7 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -15,7 +16,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -181,6 +181,8 @@ private fun NavigationGraph(
 ) {
     val usersViewModel = hiltViewModel<UsersViewModel>()
     val activitiesViewModel = hiltViewModel<ActivitiesViewModel>()
+    val context = LocalContext.current
+
     NavHost(
         navController = navController,
         startDestination = AppScreen.Home.name,
@@ -202,8 +204,7 @@ private fun NavigationGraph(
             //LoginScreen()
         }
         composable(route = AppScreen.Record.name) {
-            val trackingIntent = Intent(LocalContext.current, TrackingActivity::class.java)
-            ContextCompat.startActivity(LocalContext.current, trackingIntent, null)
+            PermissionsScreen(context)
         }
         composable(route = AppScreen.Profile.name) {
             ProfileScreen(usersViewModel = usersViewModel)

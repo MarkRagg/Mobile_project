@@ -4,10 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
 import kotlin.math.roundToInt
@@ -28,7 +25,12 @@ class LocationProvider(private val activity: AppCompatActivity) {
 
     fun getUserLocation() {
         client.lastLocation.addOnSuccessListener { location ->
-            val latLng = LatLng(location.latitude, location.longitude)
+//            while (location == null) {
+//              TODO: sleep activity
+//            }
+            var latLng = if (location == null) LatLng(43.5, 12.5)
+                else LatLng(location.latitude, location.longitude)
+
             locations.add(latLng)
             liveLocation.value = latLng
         }
@@ -55,9 +57,9 @@ class LocationProvider(private val activity: AppCompatActivity) {
     }
 
     fun trackUser() {
-        val locationRequest = LocationRequest.create()
-        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        locationRequest.interval = 5000
+        val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000).apply {
+            setGranularity(Granularity.GRANULARITY_PERMISSION_LEVEL)
+        }.build()
 
         client.requestLocationUpdates(locationRequest, locationCallback,
             Looper.getMainLooper())

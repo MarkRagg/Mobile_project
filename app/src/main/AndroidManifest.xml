@@ -9,6 +9,22 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
 
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.SEND" />
+            <data android:mimeType="text/plain" />
+        </intent>
+        <intent>
+            <action android:name="android.settings.APPLICATION_DETAILS_SETTINGS"/>
+        </intent>
+        <intent>
+            <action android:name="android.settings.LOCATION_SOURCE_SETTINGS"/>
+        </intent>
+        <intent>
+            <action android:name="android.settings.WIRELESS_SETTINGS"/>
+        </intent>
+    </queries>
+
     <application
         android:name=".TravelApp"
         android:allowBackup="false"

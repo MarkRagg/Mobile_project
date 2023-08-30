@@ -8,7 +8,8 @@ import android.os.Build
 class PermissionsManager(
     activity: AppCompatActivity,
     private val locationProvider: LocationProvider,
-    private val stepCounter: StepCounter) {
+    private val stepCounter: StepCounter
+) {
 
     private val locationPermissionProvider = activity.registerForActivityResult(
         ActivityResultContracts.RequestPermission()) { granted ->
@@ -38,5 +39,4 @@ class PermissionsManager(
             stepCounter.setupStepCounter()
         }
     }
-
 }

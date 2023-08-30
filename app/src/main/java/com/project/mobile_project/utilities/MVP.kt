@@ -70,15 +70,15 @@ class MapPresenter(private val activity: AppCompatActivity) {
         val time = elapsedTime.toDouble()
         val distance = ui.value?.distance
         val speed = (round(distance!! / time * 36) / 10)
-        val pace = (round(time / distance * 166.7) / 10)
+        val pace = (round(time / distance * 166.667) / 10)
         val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
 
         sharedPreferences.getString(context.getString(R.string.username_shared_pref), "")?.let {
             activitiesViewModel.insertActivity(
                 Activity(
                     userCreatorUsername = it,
-                    name = null,
-                    description = null,
+                    name = "Nuova attività",
+                    description = "Inserisci una descrizione",
                     totalTime = elapsedTime,
                     distance = distance,
                     speed = speed,
