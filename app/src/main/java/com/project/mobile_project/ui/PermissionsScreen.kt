@@ -1,5 +1,6 @@
 package com.project.mobile_project.ui
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.location.LocationManager
@@ -7,6 +8,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.provider.Settings
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FindReplace
@@ -25,6 +27,7 @@ import com.project.mobile_project.R
 @Composable
 fun PermissionsScreen(
     context: Context,
+    activity: Activity
     //warningViewModel: WarningViewModel
 ) {
     var gpsChecker by rememberSaveable { mutableStateOf(checkGPS(context)) }
@@ -89,6 +92,7 @@ fun PermissionsScreen(
                 onClick = {
                     val trackingIntent = Intent(context, TrackingActivity::class.java)
                     ContextCompat.startActivity(context, trackingIntent, null)
+                    activity.finish()
                 },
                 enabled = gpsChecker // && checkInternet(context) TODO: live update
             ) {

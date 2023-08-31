@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.activity
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -169,7 +170,7 @@ fun NavigationApp(
             )
         }
     ) { innerPadding ->
-        NavigationGraph(navController, innerPadding)
+        NavigationGraph(navController, innerPadding, activity = activity)
     }
 }
 
@@ -177,7 +178,8 @@ fun NavigationApp(
 private fun NavigationGraph(
     navController: NavHostController,
     innerPadding: PaddingValues,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    activity: Activity
 ) {
     val usersViewModel = hiltViewModel<UsersViewModel>()
     val activitiesViewModel = hiltViewModel<ActivitiesViewModel>()
@@ -204,7 +206,7 @@ private fun NavigationGraph(
             //LoginScreen()
         }
         composable(route = AppScreen.Record.name) {
-            PermissionsScreen(context)
+            PermissionsScreen(context, activity)
         }
         composable(route = AppScreen.Profile.name) {
             ProfileScreen(usersViewModel = usersViewModel)

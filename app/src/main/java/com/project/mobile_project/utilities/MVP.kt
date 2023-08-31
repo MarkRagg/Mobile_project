@@ -1,10 +1,13 @@
 package com.project.mobile_project.utilities
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.model.LatLng
+import com.project.mobile_project.MainActivity
 import com.project.mobile_project.R
 import com.project.mobile_project.data.Activity
 import com.project.mobile_project.viewModel.ActivitiesViewModel
@@ -60,6 +63,9 @@ class MapPresenter(private val activity: AppCompatActivity, private val isStarte
         locationProvider.stopTracking()
         stepCounter.unloadStepCounter()
         insertNewActivity(context, sharedPreferences, activitiesViewModel, elapsedTime)
+        val homeIntent = Intent(context, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(context, homeIntent, null)
+        activity.finish()
     }
     private fun insertNewActivity(
         context: Context,
