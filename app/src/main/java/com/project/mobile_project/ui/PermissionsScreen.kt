@@ -8,10 +8,9 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.provider.Settings
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FindReplace
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -24,14 +23,30 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import com.project.mobile_project.R
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PermissionsScreen(
     context: Context,
     activity: Activity
-    //warningViewModel: WarningViewModel
 ) {
     var gpsChecker by rememberSaveable { mutableStateOf(checkGPS(context)) }
-    //if (!checkGPS(context)) {
+    var internetConnChecker by rememberSaveable { mutableStateOf(checkInternet(context)) }
+
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    gpsChecker = checkGPS(context)
+                    internetConnChecker = checkInternet(context)
+                }
+            ) {
+                Icon(
+                    Icons.Filled.Refresh,
+                    contentDescription = stringResource(id = R.string.refresh_gps)
+                )
+            }
+        }
+    ) { _ ->
         Column(
             modifier = Modifier
                 .padding(all = 12.dp)
@@ -60,11 +75,11 @@ fun PermissionsScreen(
             ) {
                 Text("Attiva il GPS")
             }
-/*
+
             Spacer(modifier = Modifier.size(15.dp))
 
             Text(
-                text = "Intenet connection is needed",
+                text = "La connessione ad internet è necessaria, attivala per iniziare l'attività",
                 fontSize = 20.sp,
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
                 textAlign = TextAlign.Center,
@@ -83,9 +98,9 @@ fun PermissionsScreen(
                     }
                 }
             ) {
-                Text("Turn on internet connection")
+                Text("Attiva la connessione ad internet")
             }
-*/
+
             Spacer(modifier = Modifier.size(10.dp))
 
             Button(
@@ -94,23 +109,12 @@ fun PermissionsScreen(
                     ContextCompat.startActivity(context, trackingIntent, null)
                     activity.finish()
                 },
-                enabled = gpsChecker // && checkInternet(context) TODO: live update
+                enabled = gpsChecker && internetConnChecker
             ) {
                 Text("Inizia a correre")
             }
-            Button(
-                onClick = { gpsChecker = checkGPS(context) }
-            ) {
-                Icon(
-                    Icons.Filled.FindReplace,
-                    contentDescription = stringResource(id = R.string.refresh_gps)
-                )
-            }
         }
-   /* } else {
-        val trackingIntent = Intent(LocalContext.current, TrackingActivity::class.java)
-        ContextCompat.startActivity(LocalContext.current, trackingIntent, null)
-    }*/
+    }
 }
 
 fun checkGPS(context: Context): Boolean {
