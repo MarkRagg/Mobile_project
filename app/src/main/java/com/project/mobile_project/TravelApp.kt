@@ -144,7 +144,8 @@ fun NavigationApp(
     navController: NavHostController = rememberNavController(),
     sharedPreferences: SharedPreferences,
     context: Context,
-    activity: Activity
+    activity: Activity,
+    activityAdded: Boolean
 ) {
     // Get current back stack entry
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -170,7 +171,7 @@ fun NavigationApp(
             )
         }
     ) { innerPadding ->
-        NavigationGraph(navController, innerPadding, activity = activity)
+        NavigationGraph(navController, innerPadding, activity, activityAdded)
     }
 }
 
@@ -178,8 +179,9 @@ fun NavigationApp(
 private fun NavigationGraph(
     navController: NavHostController,
     innerPadding: PaddingValues,
-    modifier: Modifier = Modifier,
-    activity: Activity
+    activity: Activity,
+    activityAdded: Boolean,
+    modifier: Modifier = Modifier
 ) {
     val usersViewModel = hiltViewModel<UsersViewModel>()
     val activitiesViewModel = hiltViewModel<ActivitiesViewModel>()
@@ -195,7 +197,8 @@ private fun NavigationGraph(
                 onItemClicked = {
                     navController.navigate(AppScreen.Details.name)
                 },
-                activitiesViewModel = activitiesViewModel
+                activitiesViewModel = activitiesViewModel,
+                activityAdded = activityAdded
             )
         }
         composable(route = AppScreen.Details.name) {

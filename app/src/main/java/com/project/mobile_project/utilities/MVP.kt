@@ -62,40 +62,51 @@ class MapPresenter(private val activity: AppCompatActivity, private val isStarte
     ) {
         locationProvider.stopTracking()
         stepCounter.unloadStepCounter()
-        insertNewActivity(context, sharedPreferences, activitiesViewModel, elapsedTime)
+
+        val result = insertNewActivity(context, sharedPreferences, activitiesViewModel, elapsedTime)
         val homeIntent = Intent(context, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        homeIntent.putExtra("Activity added", result)
         startActivity(context, homeIntent, null)
         activity.finish()
     }
+
+    /**
+     * returns true if the activity is saved correctly,
+     * false otherwise
+     */
     private fun insertNewActivity(
         context: Context,
         sharedPreferences: SharedPreferences,
         activitiesViewModel: ActivitiesViewModel,
         elapsedTime: Long
-    ) {
+    ): Boolean {
         val time = elapsedTime.toDouble()
         val distance = ui.value?.distance
-        val speed = (round(distance!! / time * 36) / 10)
-        val pace = (round(time / distance * 166.667) / 10)
-        val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+        if (distance != null || distance != 0) {
+            val speed = (round(distance!! / time * 36) / 10)
+            val pace = (round(time / distance * 166.667) / 10)
+            val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
 
-        sharedPreferences.getString(context.getString(R.string.username_shared_pref), "")?.let {
-            activitiesViewModel.insertActivity(
-                Activity(
-                    userCreatorUsername = it,
-                    name = "Nuova attività",
-                    description = "Inserisci una descrizione",
-                    totalTime = elapsedTime,
-                    distance = distance,
-                    speed = speed,
-                    pace = pace,
-                    steps = ui.value?.formattedSteps?.toInt(),
-                    onFoot = null,
-                    favourite = false,
-                    date = LocalDateTime.now().format(dateFormatter)
+            sharedPreferences.getString(context.getString(R.string.username_shared_pref), "")?.let {
+                activitiesViewModel.insertActivity(
+                    Activity(
+                        userCreatorUsername = it,
+                        name = "Nuova attività",
+                        description = "Inserisci una descrizione",
+                        totalTime = elapsedTime,
+                        distance = distance,
+                        speed = speed,
+                        pace = pace,
+                        steps = ui.value?.formattedSteps?.toInt(),
+                        onFoot = null,
+                        favourite = false,
+                        date = LocalDateTime.now().format(dateFormatter)
+                    )
                 )
-            )
+            }
+            return true
         }
+        return false
     }
 }
 

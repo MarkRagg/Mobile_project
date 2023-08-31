@@ -2,6 +2,7 @@ package com.project.mobile_project.ui
 
 import android.content.Intent
 import android.provider.CalendarContract
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -26,18 +27,23 @@ import com.project.mobile_project.viewModel.ActivitiesViewModel
 fun HomeScreen(
     onItemClicked:  () -> Unit,
     activitiesViewModel: ActivitiesViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    activityAdded: Boolean
 ) {
     Scaffold { innerPadding ->
         Column (modifier.padding(innerPadding)) {
-            ActivitiesList(onItemClicked, activitiesViewModel)
+            ActivitiesList(onItemClicked, activitiesViewModel, activityAdded)
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ActivitiesList(onItemClicked: () -> Unit, activitiesViewModel: ActivitiesViewModel) {
+fun ActivitiesList(
+    onItemClicked: () -> Unit,
+    activitiesViewModel: ActivitiesViewModel,
+    activityAdded: Boolean
+) {
     val activities = activitiesViewModel.allActivities.collectAsState(initial = listOf()).value
     val context = LocalContext.current
 
@@ -52,6 +58,17 @@ fun ActivitiesList(onItemClicked: () -> Unit, activitiesViewModel: ActivitiesVie
                     Icons.Filled.EditCalendar,
                     contentDescription = stringResource(id = R.string.add_calendar_event)
                 )
+            }
+        },
+        snackbarHost = {
+            if (!activityAdded) {
+                Snackbar(
+                    modifier = Modifier
+                        .padding(12.dp)
+                )
+                {
+                    Text("Errore nel salvataggio dell'attività")
+                }
             }
         }
     ) { paddingValues ->

@@ -6,11 +6,7 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.SystemClock
-import android.util.Log
 import androidx.activity.viewModels
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -35,8 +31,6 @@ class TrackingActivity : AppCompatActivity(), OnMapReadyCallback {
     private val activitiesViewModel: ActivitiesViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("DEBUG", "TRACKING ACTIVITY AVVIATA")
-
         setTheme(R.style.Theme_Mobile_project)
         super.onCreate(savedInstanceState)
 
