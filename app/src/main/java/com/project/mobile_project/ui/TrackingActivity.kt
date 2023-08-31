@@ -8,6 +8,10 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
 import androidx.activity.viewModels
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -26,7 +30,8 @@ class TrackingActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var map: GoogleMap
     private lateinit var binding: ActivityMapsBinding
-    private val presenter = MapPresenter(this)
+    private val isStarted: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val presenter = MapPresenter(this, isStarted)
     private val activitiesViewModel: ActivitiesViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +50,7 @@ class TrackingActivity : AppCompatActivity(), OnMapReadyCallback {
 
         binding.btnStartStop.setOnClickListener {
             if (binding.btnStartStop.text == getString(R.string.start_label)) {
+                isStarted.value = true
                 startTracking()
                 binding.btnStartStop.setText(R.string.stop_label)
             } else {
@@ -52,6 +58,7 @@ class TrackingActivity : AppCompatActivity(), OnMapReadyCallback {
                 val sharedPreferences: SharedPreferences =
                     context.getSharedPreferences("usernameLoggedPref", Context.MODE_PRIVATE)
 
+                isStarted.value = false
                 stopTracking(context, activitiesViewModel, sharedPreferences)
                 binding.btnStartStop.setText(R.string.start_label)
             }

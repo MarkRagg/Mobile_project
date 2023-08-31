@@ -10,7 +10,7 @@ import com.google.maps.android.SphericalUtil
 import kotlin.math.roundToInt
 
 @SuppressLint("MissingPermission")
-class LocationProvider(private val activity: AppCompatActivity) {
+class LocationProvider(private val activity: AppCompatActivity, private val isStarted: MutableLiveData<Boolean>) {
 
     private val client
             by lazy { LocationServices.getFusedLocationProviderClient(activity) }
@@ -25,12 +25,9 @@ class LocationProvider(private val activity: AppCompatActivity) {
 
     fun getUserLocation() {
         client.lastLocation.addOnSuccessListener { location ->
-//            while (location == null) {
-//              TODO: sleep activity
-//            }
             if( location != null) {
-                var latLng = LatLng(location.latitude, location.longitude)
-                locations.add(latLng)
+                val latLng = LatLng(location.latitude, location.longitude)
+                if(isStarted.value != null && isStarted.value == true) locations.add(latLng)
                 liveLocation.value = latLng
             }
         }

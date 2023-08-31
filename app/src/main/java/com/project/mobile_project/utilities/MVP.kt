@@ -12,10 +12,10 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.math.round
 
-class MapPresenter(private val activity: AppCompatActivity) {
+class MapPresenter(private val activity: AppCompatActivity, private val isStarted: MutableLiveData<Boolean>) {
 
     val ui = MutableLiveData(Ui.EMPTY)
-    private val locationProvider = LocationProvider(activity)
+    private val locationProvider = LocationProvider(activity, isStarted)
     private val stepCounter = StepCounter(activity)
     private val permissionsManager = PermissionsManager(activity, locationProvider, stepCounter)
 
