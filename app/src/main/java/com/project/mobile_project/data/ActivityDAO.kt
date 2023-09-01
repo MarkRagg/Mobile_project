@@ -8,6 +8,9 @@ interface ActivityDAO {
     @Query("SELECT * FROM activity")
     fun getActivities(): Flow<List<Activity>>
 
+    @Query("SELECT * FROM activity WHERE favourite = true")
+    fun getFavouriteActivities(): Flow<List<Activity>>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(activity: Activity)
 

@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,11 +29,12 @@ fun HomeScreen(
     onItemClicked:  () -> Unit,
     activitiesViewModel: ActivitiesViewModel,
     modifier: Modifier = Modifier,
-    activityAdded: Boolean
+    activityAdded: Boolean,
+    isFlagOn: MutableState<Boolean>
 ) {
     Scaffold { innerPadding ->
         Column (modifier.padding(innerPadding)) {
-            ActivitiesList(onItemClicked, activitiesViewModel, activityAdded)
+            ActivitiesList(onItemClicked, activitiesViewModel, activityAdded, isFlagOn)
         }
     }
 }
@@ -42,9 +44,11 @@ fun HomeScreen(
 fun ActivitiesList(
     onItemClicked: () -> Unit,
     activitiesViewModel: ActivitiesViewModel,
-    activityAdded: Boolean
+    activityAdded: Boolean,
+    isFlagOn: MutableState<Boolean>
 ) {
     val activities = activitiesViewModel.allActivities.collectAsState(initial = listOf()).value
+    val favouriteActivities = activitiesViewModel.allFavouriteActivies.collectAsState(initial = listOf()).value
     val context = LocalContext.current
 
     Scaffold(
@@ -75,7 +79,10 @@ fun ActivitiesList(
         LazyVerticalGrid(
             columns = GridCells.Fixed(1),
             content = {
-                items(items = activities.reversed()) { activity ->
+                items(
+                    items = if(isFlagOn.value) { favouriteActivities.reversed() }
+                            else { activities.reversed() }
+                ) { activity ->
                     Card(
                         onClick = {
                             activitiesViewModel.selectActivity(activity)

@@ -15,7 +15,8 @@ class ActivitiesViewModel @Inject constructor(
 ): ViewModel() {
 
     val allActivities = repository.allActivities
-    val activityLiveData = MutableLiveData<List<Activity>>()
+    val allFavouriteActivies = repository.allFavouriteActivities
+    private val activityLiveData = MutableLiveData<List<Activity>>()
 
     fun insertActivity(activity: Activity) = viewModelScope.launch {
         repository.insertActivity(activity)
