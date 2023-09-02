@@ -2,7 +2,6 @@ package com.project.mobile_project.ui
 
 import android.content.Intent
 import android.provider.CalendarContract
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -21,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.project.mobile_project.R
 import com.project.mobile_project.viewModel.ActivitiesViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -28,11 +28,10 @@ fun HomeScreen(
     onItemClicked:  () -> Unit,
     activitiesViewModel: ActivitiesViewModel,
     modifier: Modifier = Modifier,
-    activityAdded: Boolean
 ) {
     Scaffold { innerPadding ->
         Column (modifier.padding(innerPadding)) {
-            ActivitiesList(onItemClicked, activitiesViewModel, activityAdded)
+            ActivitiesList(onItemClicked, activitiesViewModel)
         }
     }
 }
@@ -42,7 +41,6 @@ fun HomeScreen(
 fun ActivitiesList(
     onItemClicked: () -> Unit,
     activitiesViewModel: ActivitiesViewModel,
-    activityAdded: Boolean
 ) {
     val activities = activitiesViewModel.allActivities.collectAsState(initial = listOf()).value
     val context = LocalContext.current
@@ -59,19 +57,8 @@ fun ActivitiesList(
                     contentDescription = stringResource(id = R.string.add_calendar_event)
                 )
             }
-        },
-        snackbarHost = {
-            if (!activityAdded) {
-                Snackbar(
-                    modifier = Modifier
-                        .padding(12.dp)
-                )
-                {
-                    Text("Errore nel salvataggio dell'attività")
-                }
-            }
         }
-    ) { paddingValues ->
+    ) { _ ->
         LazyVerticalGrid(
             columns = GridCells.Fixed(1),
             content = {

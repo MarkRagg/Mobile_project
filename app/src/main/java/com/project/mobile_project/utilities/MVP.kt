@@ -82,7 +82,8 @@ class MapPresenter(private val activity: AppCompatActivity, private val isStarte
     ): Boolean {
         val time = elapsedTime.toDouble()
         val distance = ui.value?.distance
-        if (distance != null || distance != 0) {
+
+        if (distance != null && distance != 0) {
             val speed = (round(distance!! / time * 36) / 10)
             val pace = (round(time / distance * 166.667) / 10)
             val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")

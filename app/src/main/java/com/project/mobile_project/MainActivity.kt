@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -38,12 +39,14 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    if (!activityAdded) {
+                        Toast.makeText(this, "Errore nell'inserimento dell'attività", Toast.LENGTH_LONG).show()
+                    }
                     if(sharedPreferences.getBoolean(getString(R.string.user_logged_shared_pref), false)) {
                         NavigationApp(
                             sharedPreferences = sharedPreferences,
                             context = applicationContext,
                             activity = this,
-                            activityAdded = activityAdded
                         )
                     } else {
                         val i = Intent(applicationContext, LoginScreen::class.java)

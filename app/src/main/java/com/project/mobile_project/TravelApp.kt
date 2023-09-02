@@ -5,7 +5,6 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -19,7 +18,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.activity
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -145,7 +143,6 @@ fun NavigationApp(
     sharedPreferences: SharedPreferences,
     context: Context,
     activity: Activity,
-    activityAdded: Boolean
 ) {
     // Get current back stack entry
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -171,7 +168,7 @@ fun NavigationApp(
             )
         }
     ) { innerPadding ->
-        NavigationGraph(navController, innerPadding, activity, activityAdded)
+        NavigationGraph(navController, innerPadding, activity)
     }
 }
 
@@ -180,7 +177,6 @@ private fun NavigationGraph(
     navController: NavHostController,
     innerPadding: PaddingValues,
     activity: Activity,
-    activityAdded: Boolean,
     modifier: Modifier = Modifier
 ) {
     val usersViewModel = hiltViewModel<UsersViewModel>()
@@ -198,7 +194,6 @@ private fun NavigationGraph(
                     navController.navigate(AppScreen.Details.name)
                 },
                 activitiesViewModel = activitiesViewModel,
-                activityAdded = activityAdded
             )
         }
         composable(route = AppScreen.Details.name) {
