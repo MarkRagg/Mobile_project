@@ -183,7 +183,7 @@ private fun NavigationGraph(
     navController: NavHostController,
     innerPadding: PaddingValues,
     activity: Activity,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
     isFavouriteFilterOn: MutableState<Boolean>
 ) {
     val usersViewModel = hiltViewModel<UsersViewModel>()

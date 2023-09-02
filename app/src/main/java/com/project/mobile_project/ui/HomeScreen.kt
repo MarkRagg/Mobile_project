@@ -47,7 +47,6 @@ fun ActivitiesList(
     activitiesViewModel: ActivitiesViewModel,
     isFlagOn: MutableState<Boolean>
 ) {
-    val activities = activitiesViewModel.allActivities.collectAsState(initial = listOf()).value
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences(context.getString(R.string.user_shared_preferences), Context.MODE_PRIVATE)
     val username = sharedPreferences.getString(context.getString(R.string.username_shared_pref), "").toString()
