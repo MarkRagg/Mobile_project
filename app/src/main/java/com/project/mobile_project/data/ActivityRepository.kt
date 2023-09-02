@@ -24,7 +24,7 @@ class ActivityRepository @Inject constructor(private val activityDAO: ActivityDA
     }
 
     @WorkerThread
-    suspend fun updateActivity(activity: Activity) {
+    fun updateActivity(activity: Activity) {
         activityDAO.updateActivity(activity)
     }
 
@@ -41,5 +41,10 @@ class ActivityRepository @Inject constructor(private val activityDAO: ActivityDA
     @WorkerThread
     fun getActivitiesFromUser(usernameSelected: String): Flow<List<Activity>> {
         return activityDAO.getActivitiesFromUser(usernameSelected)
+    }
+
+    @WorkerThread
+    fun getFavouriteActivitiesFromUser(usernameSelected: String): Flow<List<Activity>> {
+        return activityDAO.getFavouriteActivitiesFromUser(usernameSelected)
     }
 }

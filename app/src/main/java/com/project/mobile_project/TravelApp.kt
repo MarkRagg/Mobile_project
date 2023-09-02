@@ -10,8 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -54,7 +53,8 @@ fun TopAppBarFunction(
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
     onSettingsButtonClicked: () -> Unit,
-    onLogoutButtonClicked: () -> Unit
+    onLogoutButtonClicked: () -> Unit,
+    isFavouriteFilterOn: MutableState<Boolean>
 ) {
     CenterAlignedTopAppBar(
         title = {
@@ -93,10 +93,14 @@ fun TopAppBarFunction(
                 }
             }
             if(currentScreen == AppScreen.Home.name) {
-                IconButton(onClick = onLogoutButtonClicked) {
+                IconButton(onClick = { isFavouriteFilterOn.value = !isFavouriteFilterOn.value }) {
                     Icon(
-                        Icons.Filled.FilterAlt,
-                        contentDescription = "Filter"
+                        if( isFavouriteFilterOn.value ) {
+                            Icons.Filled.Star
+                        } else {
+                            Icons.Filled.StarBorder
+                        },
+                        contentDescription = "Favourite"
                     )
                 }
             }
@@ -148,6 +152,7 @@ fun NavigationApp(
     val backStackEntry by navController.currentBackStackEntryAsState()
     // Get the name of the current screen
     val currentScreen = backStackEntry?.destination?.route ?: AppScreen.Home.name
+    val isFavouriteFilterOn = remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -156,7 +161,8 @@ fun NavigationApp(
                 canNavigateBack = navController.previousBackStackEntry != null,
                 navigateUp = { navController.navigateUp() },
                 onSettingsButtonClicked = {navController.navigate(AppScreen.Settings.name)},
-                onLogoutButtonClicked = {logout(sharedPreferences, context, activity)}
+                onLogoutButtonClicked = {logout(sharedPreferences, context, activity)},
+                isFavouriteFilterOn = isFavouriteFilterOn
             )
         },
         bottomBar = {
@@ -168,7 +174,7 @@ fun NavigationApp(
             )
         }
     ) { innerPadding ->
-        NavigationGraph(navController, innerPadding, activity)
+        NavigationGraph(navController, innerPadding, activity, isFavouriteFilterOn = isFavouriteFilterOn)
     }
 }
 
@@ -178,6 +184,7 @@ private fun NavigationGraph(
     innerPadding: PaddingValues,
     activity: Activity,
     modifier: Modifier = Modifier
+    isFavouriteFilterOn: MutableState<Boolean>
 ) {
     val usersViewModel = hiltViewModel<UsersViewModel>()
     val activitiesViewModel = hiltViewModel<ActivitiesViewModel>()
@@ -194,6 +201,7 @@ private fun NavigationGraph(
                     navController.navigate(AppScreen.Details.name)
                 },
                 activitiesViewModel = activitiesViewModel,
+                isFlagOn = isFavouriteFilterOn
             )
         }
         composable(route = AppScreen.Details.name) {

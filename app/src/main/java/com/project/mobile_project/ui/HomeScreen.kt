@@ -1,6 +1,8 @@
 package com.project.mobile_project.ui
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.provider.CalendarContract
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -11,6 +13,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,10 +31,11 @@ fun HomeScreen(
     onItemClicked:  () -> Unit,
     activitiesViewModel: ActivitiesViewModel,
     modifier: Modifier = Modifier,
+    isFlagOn: MutableState<Boolean>
 ) {
     Scaffold { innerPadding ->
         Column (modifier.padding(innerPadding)) {
-            ActivitiesList(onItemClicked, activitiesViewModel)
+            ActivitiesList(onItemClicked, activitiesViewModel, isFlagOn)
         }
     }
 }
@@ -41,9 +45,14 @@ fun HomeScreen(
 fun ActivitiesList(
     onItemClicked: () -> Unit,
     activitiesViewModel: ActivitiesViewModel,
+    isFlagOn: MutableState<Boolean>
 ) {
     val activities = activitiesViewModel.allActivities.collectAsState(initial = listOf()).value
     val context = LocalContext.current
+    val sharedPreferences = context.getSharedPreferences(context.getString(R.string.user_shared_preferences), Context.MODE_PRIVATE)
+    val username = sharedPreferences.getString(context.getString(R.string.username_shared_pref), "").toString()
+    val activities = activitiesViewModel.getActivitiesFromUsername(username).collectAsState(initial = listOf()).value
+    val favouriteActivities = activitiesViewModel.getFavouriteActivitiesFromUser(username).collectAsState(initial = listOf()).value
 
     Scaffold(
         floatingActionButton = {
@@ -62,7 +71,10 @@ fun ActivitiesList(
         LazyVerticalGrid(
             columns = GridCells.Fixed(1),
             content = {
-                items(items = activities.reversed()) { activity ->
+                items(
+                    items = if(isFlagOn.value) { favouriteActivities.reversed() }
+                            else { activities.reversed() }
+                ) { activity ->
                     Card(
                         onClick = {
                             activitiesViewModel.selectActivity(activity)

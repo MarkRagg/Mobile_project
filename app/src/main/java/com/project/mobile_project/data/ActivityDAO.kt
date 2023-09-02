@@ -30,4 +30,8 @@ interface ActivityDAO {
     @Query("SELECT * FROM activity WHERE userCreatorUsername = :usernameSelected")
     fun getActivitiesFromUser(usernameSelected: String): Flow<List<Activity>>
 
+    @Transaction
+    @Query("SELECT * FROM activity WHERE userCreatorUsername = :usernameSelected and favourite = true")
+    fun getFavouriteActivitiesFromUser(usernameSelected: String): Flow<List<Activity>>
+
 }
