@@ -3,6 +3,8 @@
     <string name="light_theme">Light</string>
     <string name="dark_theme">Dark</string>
 
+    <string name="profile_name">Profile Name</string>
+    <string name="profile_mail">Mail</string>
     <string name="activity_title">Activity Title</string>
     <string name="activity_description">Activity Description</string>
     <string name="share_activity">Share Activity</string>

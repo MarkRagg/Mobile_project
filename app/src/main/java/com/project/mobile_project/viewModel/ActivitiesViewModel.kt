@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.project.mobile_project.data.Activity
 import com.project.mobile_project.data.ActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -15,7 +16,6 @@ class ActivitiesViewModel @Inject constructor(
 ): ViewModel() {
 
     val allActivities = repository.allActivities
-    val allFavouriteActivies = repository.allFavouriteActivities
     private val activityLiveData = MutableLiveData<List<Activity>>()
 
     fun insertActivity(activity: Activity) = viewModelScope.launch {
@@ -38,10 +38,12 @@ class ActivitiesViewModel @Inject constructor(
         repository.updateActivityName(activityId, name)
     }
 
-    fun getActivitiesFromUsername(username: String) = viewModelScope.launch {
-        repository.getActivitiesFromUser(username).collect {
-            activityLiveData.postValue(it)
-        }
+    fun getActivitiesFromUsername(username: String): Flow<List<Activity>> {
+        return repository.getActivitiesFromUser(username)
+    }
+
+    fun getFavouriteActivitiesFromUser(username: String): Flow<List<Activity>> {
+        return repository.getFavouriteActivitiesFromUser(username)
     }
 
     fun updateActivityFavourite(activityId: String, favourite: Boolean) = viewModelScope.launch {

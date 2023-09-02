@@ -15,6 +15,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Mail
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -27,6 +29,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -157,27 +160,44 @@ fun ProfileScreen(usersViewModel: UsersViewModel) {
 
         Spacer(modifier = Modifier.size(15.dp))
 
-
-        Text(
-            text = if (user?.firstName?.isNotEmpty() == true
-                && user?.lastName?.isNotEmpty() == true) {
-                user.firstName + " " + user.lastName
-            } else "Nome Cognome",
-            fontSize = 20.sp,
-            color = MaterialTheme.colorScheme.onSecondaryContainer,
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyMedium,
-        )
+        Row(
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Icon(
+                Icons.Filled.AccountCircle,
+                contentDescription = stringResource(id = R.string.profile_name)
+            )
+            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+            Text(
+                text = if (user?.firstName?.isNotEmpty() == true
+                    && user?.lastName?.isNotEmpty() == true) {
+                    user.firstName + " " + user.lastName
+                } else "Nome Cognome",
+                fontSize = 20.sp,
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        }
 
         Spacer(modifier = Modifier.size(15.dp))
 
-        Text(
-            text = if (user?.email?.isNotEmpty() == true) user.email else "trembolone.legal@ronnie.com",
-            fontSize = 20.sp,
-            color = MaterialTheme.colorScheme.onSecondaryContainer,
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyMedium,
-        )
+        Row(
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Icon(
+                Icons.Filled.Mail,
+                contentDescription = stringResource(id = R.string.profile_mail)
+            )
+            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+            Text(
+                text = if (user?.email?.isNotEmpty() == true) user.email else "",
+                fontSize = 20.sp,
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        }
     }
 }
 

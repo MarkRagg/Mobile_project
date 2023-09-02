@@ -7,7 +7,6 @@ import javax.inject.Inject
 class ActivityRepository @Inject constructor(private val activityDAO: ActivityDAO) {
 
     val allActivities: Flow<List<Activity>> = activityDAO.getActivities()
-    val allFavouriteActivities: Flow<List<Activity>> = activityDAO.getFavouriteActivities()
 
     @WorkerThread
     suspend fun insertActivity(activity: Activity) {
@@ -42,5 +41,10 @@ class ActivityRepository @Inject constructor(private val activityDAO: ActivityDA
     @WorkerThread
     fun getActivitiesFromUser(usernameSelected: String): Flow<List<Activity>> {
         return activityDAO.getActivitiesFromUser(usernameSelected)
+    }
+
+    @WorkerThread
+    fun getFavouriteActivitiesFromUser(usernameSelected: String): Flow<List<Activity>> {
+        return activityDAO.getFavouriteActivitiesFromUser(usernameSelected)
     }
 }

@@ -1,6 +1,8 @@
 package com.project.mobile_project.ui
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.provider.CalendarContract
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -47,9 +49,12 @@ fun ActivitiesList(
     activityAdded: Boolean,
     isFlagOn: MutableState<Boolean>
 ) {
-    val activities = activitiesViewModel.allActivities.collectAsState(initial = listOf()).value
-    val favouriteActivities = activitiesViewModel.allFavouriteActivies.collectAsState(initial = listOf()).value
+
     val context = LocalContext.current
+    val sharedPreferences = context.getSharedPreferences(context.getString(R.string.user_shared_preferences), Context.MODE_PRIVATE)
+    val username = sharedPreferences.getString(context.getString(R.string.username_shared_pref), "").toString()
+    val activities = activitiesViewModel.getActivitiesFromUsername(username).collectAsState(initial = listOf()).value
+    val favouriteActivities = activitiesViewModel.getFavouriteActivitiesFromUser(username).collectAsState(initial = listOf()).value
 
     Scaffold(
         floatingActionButton = {
