@@ -1,9 +1,6 @@
 package com.project.mobile_project.viewModel
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.project.mobile_project.data.User
 import com.project.mobile_project.data.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +11,6 @@ import javax.inject.Inject
 class UsersViewModel @Inject constructor(private val repository: UserRepository): ViewModel() {
 
     val allUsers = repository.allUsers
-    val userLiveData = MutableLiveData<User>()
 
     fun insertUser(user: User) = viewModelScope.launch {
         repository.insertUser(user)
@@ -36,16 +32,12 @@ class UsersViewModel @Inject constructor(private val repository: UserRepository)
         repository.updateProfileImg(username, profileImg)
     }
 
-    fun getUserFromUsername(username: String, password: String) = viewModelScope.launch {
-        repository.getUserFromUsernameAndPassw(username, password).collect {
-            userLiveData.postValue(it)
-        }
+    fun getUserFromUsername(username: String, password: String): User? {
+        return repository.getUserFromUsernameAndPassw(username, password)
     }
 
-    fun getUser(username: String) = viewModelScope.launch {
-        repository.getUserFromUsername(username).collect {
-            userLiveData.postValue(it)
-        }
+    fun getUser(username: String): User? {
+        return repository.getUserFromUsername(username)
     }
 
     private var _userSelected: User? = null

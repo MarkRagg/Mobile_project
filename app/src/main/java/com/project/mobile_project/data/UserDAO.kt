@@ -24,10 +24,10 @@ interface UserDAO {
     suspend fun updateProfileImg(username: String, profileImg: String)
 
     @Query("SELECT * FROM user WHERE username = :usernameSelected AND password = :passwordSelected")
-    fun getUserFromUsernameAndPassw(usernameSelected: String, passwordSelected: String): Flow<User>
+    fun getUserFromUsernameAndPassw(usernameSelected: String, passwordSelected: String): User?
 
     @Query("SELECT * FROM user WHERE username = :usernameSelected")
-    fun getUserFromUsername(usernameSelected: String): Flow<User>
+    fun getUserFromUsername(usernameSelected: String): User?
 
     /*@Transaction
     @Query("SELECT user.* FROM activity, user WHERE userCreatorId = username")

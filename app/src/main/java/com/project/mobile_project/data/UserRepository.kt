@@ -1,7 +1,10 @@
 package com.project.mobile_project.data
 
 import androidx.annotation.WorkerThread
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.runBlocking
+import okhttp3.Dispatcher
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(private val userDAO: UserDAO) {
@@ -34,13 +37,18 @@ class UserRepository @Inject constructor(private val userDAO: UserDAO) {
     }
 
     @WorkerThread
-    fun getUserFromUsernameAndPassw(usernameSelected: String, passwordSelected: String): Flow<User> {
-        return userDAO.getUserFromUsernameAndPassw(usernameSelected, passwordSelected)
+    fun getUserFromUsernameAndPassw(usernameSelected: String, passwordSelected: String): User? {
+        return runBlocking(Dispatchers.IO) {
+            userDAO.getUserFromUsernameAndPassw(usernameSelected, passwordSelected)
+        }
+
     }
 
     @WorkerThread
-    fun getUserFromUsername(usernameSelected: String): Flow<User> {
-        return userDAO.getUserFromUsername(usernameSelected)
+    fun getUserFromUsername(usernameSelected: String): User? {
+        return runBlocking(Dispatchers.IO) {
+            userDAO.getUserFromUsername(usernameSelected)
+        }
     }
 
     /*@WorkerThread

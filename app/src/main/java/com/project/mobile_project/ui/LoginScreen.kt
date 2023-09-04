@@ -146,16 +146,15 @@ class LoginScreen: ComponentActivity() {
 }
 
 private fun login(username: String, password: String, viewModel: UsersViewModel, lifecycleOwner: LifecycleOwner, context: Context, sharedPreferences: SharedPreferences) {
-  viewModel.getUserFromUsername(username, password)
-  viewModel.userLiveData.observe(lifecycleOwner) {
-    if(it != null) {
+    val user = viewModel.getUserFromUsername(username, password)
+
+    if(user != null) {
         saveLoggedUser(username, sharedPreferences, context)
         val homeIntent = Intent(context, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(context, homeIntent, null)
     } else {
         Toast.makeText(context, "Username o password sbagliata!", Toast.LENGTH_LONG).show()
     }
-  }
 }
 
 fun saveLoggedUser(username: String, sharedPreferences: SharedPreferences, context: Context) {
