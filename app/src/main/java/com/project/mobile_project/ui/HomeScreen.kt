@@ -4,10 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.provider.CalendarContract
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.platform.LocalContext
@@ -17,6 +19,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -81,7 +84,7 @@ fun ActivitiesList(
                         },
                         modifier = Modifier
                             .size(width = 150.dp, height = 120.dp)
-                            .padding(8.dp, 4.dp)
+                            .padding(8.dp, 8.dp)
                             .fillMaxWidth(),
                         colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.secondaryContainer
@@ -92,14 +95,14 @@ fun ActivitiesList(
                                 .padding(all = 12.dp)
                                 .fillMaxSize(),
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
+                            horizontalArrangement = Arrangement.Start
                         ) {
                             Column(
                                 modifier = Modifier
-                                    .padding(all = 12.dp)
+                                    .padding(start = 12.dp, bottom = 12.dp)
                                     .fillMaxSize(0.9f),
                                 verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
+                                horizontalAlignment = Alignment.Start
                             ){
                                 activity.name?.let {
                                     Text(
@@ -107,26 +110,46 @@ fun ActivitiesList(
                                         fontSize = 17.sp,
                                         color = MaterialTheme.colorScheme.onSecondaryContainer,
                                         textAlign = TextAlign.Center,
-                                        modifier = Modifier.weight(10f),
+                                        modifier = Modifier.weight(2f),
                                         style = MaterialTheme.typography.titleMedium
                                     )
-                                }
+                                    Text(
+                                        text = activity.date,
+                                        fontSize = 10.sp,
+                                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier.weight(2f),
+                                        style = MaterialTheme.typography.bodySmall
+                                    )
+                                    Row(
+                                        horizontalArrangement = Arrangement.End
+                                    ) {
+                                        Text(
+                                            text = "Distanza: " + activity.distance + "m",
+                                            fontSize = 12.sp,
+                                            color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                            textAlign = TextAlign.Center,
+                                            modifier = Modifier.padding(end = 12.dp),
+                                            style = MaterialTheme.typography.bodySmall
+                                        )
 
-                                Text(
-                                    text = activity.date,
-                                    fontSize = 12.sp,
-                                    color = MaterialTheme.colorScheme.onSecondaryContainer,
-                                    textAlign = TextAlign.Center,
-                                    modifier = Modifier.weight(8f),
-                                    style = MaterialTheme.typography.bodySmall
-                                )
+                                        Text(
+                                            text = "Passo: " + activity.pace + " min/km",
+                                            fontSize = 12.sp,
+                                            color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                            textAlign = TextAlign.Center,
+                                            modifier = Modifier.padding(start = 12.dp),
+                                            style = MaterialTheme.typography.bodySmall
+                                        )
+                                    }
+                                }
                             }
 
-                            FloatingActionButton(
+                            IconButton(
                                 onClick = {
                                     activitiesViewModel.updateActivityFavourite(activity.activityId, !(activity.favourite))
                                 },
-                                modifier = Modifier.weight(1f)//.align(alignment = Alignment.Bottom)
+                                modifier = Modifier.weight(1f)
                             ) {
                                 Icon(
                                     if(activity.favourite) {
