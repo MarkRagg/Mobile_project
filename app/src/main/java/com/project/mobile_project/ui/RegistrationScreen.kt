@@ -31,11 +31,13 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.project.mobile_project.MainActivity
 import com.project.mobile_project.R
+import com.project.mobile_project.data.Activity
 import com.project.mobile_project.data.User
 import com.project.mobile_project.ui.theme.Mobile_projectTheme
 import com.project.mobile_project.viewModel.SettingsViewModel
 import com.project.mobile_project.viewModel.UsersViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import okhttp3.internal.wait
 
 @AndroidEntryPoint
 class RegistrationScreen: ComponentActivity() {
@@ -141,7 +143,8 @@ class RegistrationScreen: ComponentActivity() {
                                     viewModel = usersViewModel,
                                     lifecycleOwner = activity,
                                     sharedPreferences = sharedPreferences,
-                                    context = activity
+                                    context = activity,
+                                    activity = activity
                                 )
                             },
                             enabled = canBeEnabled(firstName, lastName, email, username, password),
@@ -175,7 +178,7 @@ class RegistrationScreen: ComponentActivity() {
     }
 }
 
-private fun registerNewUser(firstName: String, lastName: String, username: String, password: String, email: String, viewModel: UsersViewModel, lifecycleOwner: LifecycleOwner, sharedPreferences: SharedPreferences, context: Context) {
+private fun registerNewUser(firstName: String, lastName: String, username: String, password: String, email: String, viewModel: UsersViewModel, lifecycleOwner: LifecycleOwner, activity: ComponentActivity, sharedPreferences: SharedPreferences, context: Context) {
     val newUser = User(
         firstName = firstName,
         lastName = lastName,
@@ -186,16 +189,16 @@ private fun registerNewUser(firstName: String, lastName: String, username: Strin
         profileImg = null
     )
 
-    viewModel.getUserFromUsername(username, password)
-    viewModel.userLiveData.observe(lifecycleOwner) {
-        if(it != null) {
-            Toast.makeText(context, "Username già esistente!", Toast.LENGTH_LONG).show()
-        } else {
-            saveLoggedUser(username, sharedPreferences, context)
-            viewModel.insertUser(newUser)
-            val homeIntent = Intent(context, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-            ContextCompat.startActivity(context, homeIntent, null)
-        }
+    val user = viewModel.getUser(username)
+
+    if(user != null) {
+        Toast.makeText(context, "Username già esistente!", Toast.LENGTH_LONG).show()
+    } else {
+        saveLoggedUser(username, sharedPreferences, context)
+        viewModel.insertUser(newUser)
+        val homeIntent = Intent(context, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        ContextCompat.startActivity(context, homeIntent, null)
+        activity.finish()
     }
 }
 
