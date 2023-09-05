@@ -23,6 +23,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.project.mobile_project.data.AppDatabase
 import com.project.mobile_project.ui.*
+import com.project.mobile_project.ui.theme.Accent
+import com.project.mobile_project.ui.theme.StrongPrimary
+import com.project.mobile_project.ui.theme.TextColor
 import com.project.mobile_project.viewModel.ActivitiesViewModel
 import com.project.mobile_project.viewModel.SettingsViewModel
 import com.project.mobile_project.viewModel.UsersViewModel
@@ -106,7 +109,9 @@ fun TopAppBarFunction(
             }
         },
         colors = TopAppBarDefaults.smallTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
+            containerColor = MaterialTheme.colorScheme.primary,
+            titleContentColor = MaterialTheme.colorScheme.onPrimary,
+            actionIconContentColor = MaterialTheme.colorScheme.onPrimary
         )
     )
 }

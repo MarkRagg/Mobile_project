@@ -39,6 +39,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.project.mobile_project.R
 import com.project.mobile_project.data.User
+import com.project.mobile_project.ui.theme.StrongPrimary
 import com.project.mobile_project.utilities.createImageFile
 import com.project.mobile_project.utilities.saveImage
 import com.project.mobile_project.viewModel.UsersViewModel
@@ -139,6 +140,7 @@ fun ProfileScreen(usersViewModel: UsersViewModel) {
         Spacer(modifier = Modifier.size(15.dp))
 
         Button(
+            colors = ButtonDefaults.buttonColors(StrongPrimary),
             onClick = {
                 val permissionCheckResult =
                     ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)

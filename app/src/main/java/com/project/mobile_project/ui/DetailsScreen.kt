@@ -112,6 +112,10 @@ fun DetailsScreen(activitiesViewModel: ActivitiesViewModel) {
                     top = 12.dp,
                     end = 20.dp,
                     bottom = 12.dp
+                ),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.onPrimary,
+                    contentColor = MaterialTheme.colorScheme.primary
                 )
             ) {
                 Text("Save")

@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import com.project.mobile_project.R
+import com.project.mobile_project.ui.theme.StrongPrimary
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,11 +39,13 @@ fun PermissionsScreen(
                 onClick = {
                     gpsChecker = checkGPS(context)
                     internetConnChecker = checkInternet(context)
-                }
+                },
+                containerColor = MaterialTheme.colorScheme.onPrimary
             ) {
                 Icon(
                     Icons.Filled.Refresh,
-                    contentDescription = stringResource(id = R.string.refresh_gps)
+                    contentDescription = stringResource(id = R.string.refresh_gps),
+                    tint = MaterialTheme.colorScheme.primary
                 )
             }
         }
@@ -65,6 +68,10 @@ fun PermissionsScreen(
             Spacer(modifier = Modifier.size(10.dp))
 
             Button(
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.onPrimary,
+                    contentColor = MaterialTheme.colorScheme.primary
+                ),
                 onClick = {
                     val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -89,6 +96,10 @@ fun PermissionsScreen(
             Spacer(modifier = Modifier.size(10.dp))
 
             Button(
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.onPrimary,
+                    contentColor = MaterialTheme.colorScheme.primary
+                ),
                 onClick = {
                     val intent = Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS).apply {
                         flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -104,6 +115,10 @@ fun PermissionsScreen(
             Spacer(modifier = Modifier.size(10.dp))
 
             Button(
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.onPrimary,
+                    contentColor = MaterialTheme.colorScheme.primary
+                ),
                 onClick = {
                     val trackingIntent = Intent(context, TrackingActivity::class.java)
                     ContextCompat.startActivity(context, trackingIntent, null)

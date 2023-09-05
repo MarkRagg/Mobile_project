@@ -58,7 +58,10 @@ fun SettingsScreen(settingsViewModel: SettingsViewModel) {
                     ) {
                         RadioButton(
                             selected = (text == theme),
-                            onClick = null // null recommended for accessibility with screenreaders
+                            onClick = null, // null recommended for accessibility with screenreaders
+                            colors = RadioButtonDefaults.colors(
+                                selectedColor = MaterialTheme.colorScheme.onPrimary
+                            )
                         )
                         Text(
                             text = text,
