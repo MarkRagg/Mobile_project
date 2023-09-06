@@ -17,6 +17,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -24,7 +25,6 @@ import androidx.compose.ui.unit.sp
 import com.project.mobile_project.R
 import com.project.mobile_project.ui.theme.*
 import com.project.mobile_project.viewModel.ActivitiesViewModel
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -77,102 +77,135 @@ fun ActivitiesList(
                 }
             }
         ) { _ ->
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(1),
-                content = {
-                    items(
-                        items = if(isFlagOn.value) { favouriteActivities.reversed() }
-                        else { activities.reversed() }
-                    ) { activity ->
-                        Card(
-                            onClick = {
-                                activitiesViewModel.selectActivity(activity)
-                                onItemClicked()
-                            },
-                            modifier = Modifier
-                                .size(width = 150.dp, height = 120.dp)
-                                .padding(8.dp, 8.dp)
-                                .fillMaxWidth(),
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.secondary
-                            )
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .padding(all = 12.dp)
-                                    .fillMaxSize(),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Start
-                            ) {
-                                Column(
-                                    modifier = Modifier
-                                        .padding(start = 12.dp, bottom = 12.dp)
-                                        .fillMaxSize(0.9f),
-                                    verticalArrangement = Arrangement.Center,
-                                    horizontalAlignment = Alignment.Start
-                                ){
-                                    activity.name?.let {
-                                        Text(
-                                            text = it,
-                                            fontSize = 17.sp,
-                                            color = MaterialTheme.colorScheme.onSecondaryContainer,
-                                            textAlign = TextAlign.Center,
-                                            modifier = Modifier.weight(2f),
-                                            style = MaterialTheme.typography.titleMedium
-                                        )
-                                        Text(
-                                            text = activity.date,
-                                            fontSize = 10.sp,
-                                            color = MaterialTheme.colorScheme.onSecondaryContainer,
-                                            textAlign = TextAlign.Center,
-                                            modifier = Modifier.weight(2f),
-                                            style = MaterialTheme.typography.bodySmall
-                                        )
-                                        Row(
-                                            horizontalArrangement = Arrangement.End
-                                        ) {
-                                            Text(
-                                                text = "Distanza: " + activity.distance + "m",
-                                                fontSize = 12.sp,
-                                                color = MaterialTheme.colorScheme.onSecondaryContainer,
-                                                textAlign = TextAlign.Center,
-                                                modifier = Modifier.padding(end = 12.dp),
-                                                style = MaterialTheme.typography.bodySmall
-                                            )
+            if (favouriteActivities.isEmpty() && activities.isEmpty()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Registra una nuova attività selezionando il tasto Record",
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                    )
+                    
+                    Spacer(modifier = Modifier.size(20.dp))
 
+                    Icon(
+                        imageVector = Icons.Filled.ArrowDownward,
+                        contentDescription = "Down arrow",
+                        modifier = Modifier.scale(1.4F)
+                        )
+                }
+            } else {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(1),
+                    content = {
+                        items(
+                            items = if (isFlagOn.value) {
+                                favouriteActivities.reversed()
+                            } else {
+                                activities.reversed()
+                            }
+                        ) { activity ->
+                            Card(
+                                onClick = {
+                                    activitiesViewModel.selectActivity(activity)
+                                    onItemClicked()
+                                },
+                                modifier = Modifier
+                                    .size(width = 150.dp, height = 120.dp)
+                                    .padding(8.dp, 8.dp)
+                                    .fillMaxWidth(),
+                                colors = CardDefaults.cardColors(
+                                    containerColor = MaterialTheme.colorScheme.secondary
+                                )
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .padding(all = 12.dp)
+                                        .fillMaxSize(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Start
+                                ) {
+                                    Column(
+                                        modifier = Modifier
+                                            .padding(start = 12.dp, bottom = 12.dp)
+                                            .fillMaxSize(0.9f),
+                                        verticalArrangement = Arrangement.Center,
+                                        horizontalAlignment = Alignment.Start
+                                    ) {
+                                        activity.name?.let {
                                             Text(
-                                                text = "Passo: " + activity.pace + " min/km",
-                                                fontSize = 12.sp,
+                                                text = it,
+                                                fontSize = 17.sp,
                                                 color = MaterialTheme.colorScheme.onSecondaryContainer,
                                                 textAlign = TextAlign.Center,
-                                                modifier = Modifier.padding(start = 12.dp),
+                                                modifier = Modifier.weight(2f),
+                                                style = MaterialTheme.typography.titleMedium
+                                            )
+                                            Text(
+                                                text = activity.date,
+                                                fontSize = 10.sp,
+                                                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                                textAlign = TextAlign.Center,
+                                                modifier = Modifier.weight(2f),
                                                 style = MaterialTheme.typography.bodySmall
                                             )
+                                            Row(
+                                                horizontalArrangement = Arrangement.End
+                                            ) {
+                                                Text(
+                                                    text = "Distanza: " + activity.distance + "m",
+                                                    fontSize = 12.sp,
+                                                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                                    textAlign = TextAlign.Center,
+                                                    modifier = Modifier.padding(end = 12.dp),
+                                                    style = MaterialTheme.typography.bodySmall
+                                                )
+
+                                                Text(
+                                                    text = "Passo: " + activity.pace + " min/km",
+                                                    fontSize = 12.sp,
+                                                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                                    textAlign = TextAlign.Center,
+                                                    modifier = Modifier.padding(start = 12.dp),
+                                                    style = MaterialTheme.typography.bodySmall
+                                                )
+                                            }
                                         }
                                     }
-                                }
 
-                                IconButton(
-                                    onClick = {
-                                        activitiesViewModel.updateActivityFavourite(activity.activityId, !(activity.favourite))
-                                    },
-                                    modifier = Modifier.weight(1f)
-                                ) {
-                                    Icon(
-                                        if(activity.favourite) {
-                                            Icons.Filled.Star
-                                        } else {
-                                            Icons.Filled.StarBorder
+                                    IconButton(
+                                        onClick = {
+                                            activitiesViewModel.updateActivityFavourite(
+                                                activity.activityId,
+                                                !(activity.favourite)
+                                            )
                                         },
-                                        contentDescription = stringResource(id = R.string.update_favourite),
-                                        tint = MaterialTheme.colorScheme.onPrimary
-                                    )
+                                        modifier = Modifier.weight(1f)
+                                    ) {
+                                        Icon(
+                                            if (activity.favourite) {
+                                                Icons.Filled.Star
+                                            } else {
+                                                Icons.Filled.StarBorder
+                                            },
+                                            contentDescription = stringResource(id = R.string.update_favourite),
+                                            tint = MaterialTheme.colorScheme.onPrimary
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            )
+                )
+            }
         }
     }
 }
