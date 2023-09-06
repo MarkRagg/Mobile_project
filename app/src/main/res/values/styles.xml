@@ -3,9 +3,9 @@
     <!-- Base application Theme -->
     <style name="Theme.Mobile_project" parent="Theme.AppCompat.DayNight.DarkActionBar" >
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryDark">@color/purple_700</item>
-        <item name="colorAccent">@color/purple_500</item>
+        <item name="colorPrimary">#FF90a7c4</item>
+        <item name="colorPrimaryDark">#FF0f1225</item>
+        <item name="colorAccent">#FF0f1225</item>
     </style>
 
     <!-- Splash Screen Theme -->
