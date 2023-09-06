@@ -27,10 +27,10 @@
     <string name="description">Descrizione</string>
 
     <string name="title_activity_maps">Map</string>
-    <string name="steps">Steps</string>
-    <string name="elapsed_time_label">Elapsed time</string>
-    <string name="distance_label">Distance</string>
-    <string name="start_label">Start</string>
+    <string name="steps">Passi</string>
+    <string name="elapsed_time_label">Tempo trascorso</string>
+    <string name="distance_label">Distanza</string>
+    <string name="start_label">Inizia</string>
     <string name="stop_label">Stop</string>
-    <string name="distance_value">%d meters</string>
+    <string name="distance_value">%d metri</string>
 </resources>

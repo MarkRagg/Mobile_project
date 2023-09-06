@@ -42,11 +42,11 @@ sealed class AppScreen(val name: String) {
     object Details : AppScreen("Details Screen")
 
     object Login : AppScreen("Login")
-    object Profile : AppScreen("Profile")
+    object Profile : AppScreen("Profilo")
 
-    object Record : AppScreen("Record")
+    object Record : AppScreen("Registra")
 
-    object Settings : AppScreen("Settings")
+    object Settings : AppScreen("Impostazioni")
 }
 
 @Composable
@@ -83,7 +83,7 @@ fun TopAppBarFunction(
                 IconButton(onClick =  onSettingsButtonClicked ) {
                     Icon(
                         Icons.Filled.Settings,
-                        contentDescription = "Settings"
+                        contentDescription = "Impostazioni"
                     )
                 }
             }
@@ -132,13 +132,13 @@ fun BottomAppBarFunction(
         )
         NavigationBarItem(
             icon = { Icon(Icons.Filled.AddCircle, contentDescription = "Registra") },
-            label = { Text("Record") },
+            label = { Text("Registra") },
             selected = currentScreen == AppScreen.Record.name,
             onClick = onRecordButtonClicked
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Filled.Person, contentDescription = "Profile") },
-            label = { Text("Profile") },
+            icon = { Icon(Icons.Filled.Person, contentDescription = "Profilo") },
+            label = { Text("Profilo") },
             selected = currentScreen == AppScreen.Profile.name,
             onClick = onProfileButtonClicked
         )
@@ -213,8 +213,6 @@ private fun NavigationGraph(
             DetailsScreen(activitiesViewModel = activitiesViewModel)
         }
         composable(route = AppScreen.Login.name) {
-            //AddScreen { navController.popBackStack(AppScreen.Home.name, inclusive = false) }
-            //LoginScreen()
         }
         composable(route = AppScreen.Record.name) {
             PermissionsScreen(context, activity)

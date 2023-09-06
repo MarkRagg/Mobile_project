@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -52,7 +51,6 @@ fun ProfileScreen(usersViewModel: UsersViewModel) {
     var photoURI by rememberSaveable { mutableStateOf("") }
     val sharedPreferences = context.getSharedPreferences(context.getString(R.string.user_shared_preferences), Context.MODE_PRIVATE)
     val user = getUser(usersViewModel.allUsers.collectAsState(initial = listOf()).value, sharedPreferences.getString(context.getString(R.string.username_shared_pref), ""))
-    Log.d("DEBUG", user.toString())
     val imageModifier = Modifier
         .size(200.dp)
         .border(
@@ -65,7 +63,6 @@ fun ProfileScreen(usersViewModel: UsersViewModel) {
         modifier = Modifier
             .padding(all = 12.dp)
             .fillMaxSize(),
-        //verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -117,7 +114,7 @@ fun ProfileScreen(usersViewModel: UsersViewModel) {
             )
             user?.username?.let { usersViewModel.updateProfileImg(it, saveImage(context.applicationContext.contentResolver, capturedImageUri)) }
             capturedImageUri = Uri.EMPTY
-        } else if (user?.profileImg?.isEmpty() == null /*true*/) {
+        } else if (user?.profileImg?.isEmpty() == null) {
             Image(
                 painter = painterResource(id = R.drawable.baseline_android_24),
                 contentDescription = "image placeholder",
@@ -157,7 +154,7 @@ fun ProfileScreen(usersViewModel: UsersViewModel) {
                 modifier = Modifier.size(ButtonDefaults.IconSize)
             )
             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-            Text("Take a picture")
+            Text("Scatta foto")
         }
 
         Spacer(modifier = Modifier.size(15.dp))

@@ -8,14 +8,18 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.provider.Settings
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DirectionsRun
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -59,63 +63,56 @@ fun PermissionsScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Controlla che il GPS sia acceso! Il bottone per iniziare l'attività non sarà disponibile altrimenti!",
+                text = "GPS e connessione ad internet sono necessari!\nAttivali per iniziare l'attività",
                 fontSize = 20.sp,
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyMedium
             )
 
-            Spacer(modifier = Modifier.size(10.dp))
+            Spacer(modifier = Modifier.size(15.dp))
 
-            Button(
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.onPrimary,
-                    contentColor = MaterialTheme.colorScheme.primary
-                ),
-                onClick = {
-                    val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    if (intent.resolveActivity(context.packageManager) != null) {
-                        context.startActivity(intent)
+            Row {
+
+                Button(
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.onPrimary,
+                        contentColor = MaterialTheme.colorScheme.primary
+                    ),
+                    onClick = {
+                        val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        if (intent.resolveActivity(context.packageManager) != null) {
+                            context.startActivity(intent)
+                        }
                     }
+                ) {
+                    Text("GPS")
                 }
-            ) {
-                Text("Attiva il GPS")
+
+                Spacer(modifier = Modifier.size(15.dp))
+
+                Button(
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.onPrimary,
+                        contentColor = MaterialTheme.colorScheme.primary
+                    ),
+                    onClick = {
+                        val intent = Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        }
+                        if (intent.resolveActivity(context.packageManager) != null) {
+                            context.startActivity(intent)
+                        }
+                    }
+                ) {
+                    Text("Internet")
+                }
             }
 
             Spacer(modifier = Modifier.size(15.dp))
 
-            Text(
-                text = "La connessione ad internet è necessaria, attivala per iniziare l'attività",
-                fontSize = 20.sp,
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.bodyMedium
-            )
-
-            Spacer(modifier = Modifier.size(10.dp))
-
-            Button(
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.onPrimary,
-                    contentColor = MaterialTheme.colorScheme.primary
-                ),
-                onClick = {
-                    val intent = Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    }
-                    if (intent.resolveActivity(context.packageManager) != null) {
-                        context.startActivity(intent)
-                    }
-                }
-            ) {
-                Text("Attiva la connessione ad internet")
-            }
-
-            Spacer(modifier = Modifier.size(10.dp))
-
-            Button(
+            OutlinedButton(
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.onPrimary,
                     contentColor = MaterialTheme.colorScheme.primary
@@ -125,9 +122,15 @@ fun PermissionsScreen(
                     ContextCompat.startActivity(context, trackingIntent, null)
                     activity.finish()
                 },
-                enabled = gpsChecker && internetConnChecker
+                enabled = gpsChecker && internetConnChecker,
+                shape = CircleShape,
+                modifier= Modifier.size(70.dp),
             ) {
-                Text("Inizia a correre")
+                Icon(
+                    imageVector = Icons.Filled.DirectionsRun,
+                    contentDescription = "Start running",
+                    modifier = Modifier.scale(1.1F)
+                )
             }
         }
     }

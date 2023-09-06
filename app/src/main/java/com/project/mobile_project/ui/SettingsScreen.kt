@@ -31,7 +31,7 @@ fun SettingsScreen(settingsViewModel: SettingsViewModel) {
                     .fillMaxSize(),
             ) {
                 Text(
-                    text = "Theme",
+                    text = "Tema dell'app",
                     fontSize = 20.sp,
                     color = MaterialTheme.colorScheme.onSecondaryContainer,
                     textAlign = TextAlign.Center,
