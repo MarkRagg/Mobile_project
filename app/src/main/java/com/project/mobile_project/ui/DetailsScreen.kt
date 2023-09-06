@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.project.mobile_project.R
 import com.project.mobile_project.data.Activity
+import com.project.mobile_project.ui.theme.Accent
 import com.project.mobile_project.viewModel.ActivitiesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,8 +40,11 @@ fun DetailsScreen(activitiesViewModel: ActivitiesViewModel) {
 
     Scaffold (
         floatingActionButton = {
-            FloatingActionButton(onClick = { shareDetails(context, selectedActivity) }) {
-                Icon(Icons.Filled.Share, contentDescription = stringResource(id = R.string.share_activity))
+            FloatingActionButton(
+                onClick = { shareDetails(context, selectedActivity) },
+                containerColor = MaterialTheme.colorScheme.onPrimary
+            ) {
+                Icon(Icons.Filled.Share, contentDescription = stringResource(id = R.string.share_activity), tint = MaterialTheme.colorScheme.primary)
             }
         }
     ) { paddingValues ->
@@ -60,7 +64,13 @@ fun DetailsScreen(activitiesViewModel: ActivitiesViewModel) {
                 value = activityName!!,
                 onValueChange = { newText: String -> activityName = newText },
                 label = { Text("Titolo") },
-                placeholder = { if (activityName.isNullOrBlank()) Text("Titolo") else selectedActivity?.name }
+                placeholder = { if (activityName.isNullOrBlank()) Text("Titolo") else selectedActivity?.name },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Accent,
+                    focusedLabelColor = Accent,
+                    focusedLeadingIconColor = Accent,
+                    cursorColor = Accent
+                )
             )
             
             Spacer(modifier = Modifier.padding(5.dp))
@@ -73,7 +83,7 @@ fun DetailsScreen(activitiesViewModel: ActivitiesViewModel) {
                                 .size(width = 100.dp, height = 80.dp)
                                 .padding(3.dp),
                             colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.secondaryContainer
+                                containerColor = MaterialTheme.colorScheme.secondary
                             )
                         ) {
                             Column(

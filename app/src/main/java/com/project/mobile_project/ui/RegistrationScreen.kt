@@ -33,6 +33,7 @@ import com.project.mobile_project.MainActivity
 import com.project.mobile_project.R
 import com.project.mobile_project.data.Activity
 import com.project.mobile_project.data.User
+import com.project.mobile_project.ui.theme.Accent
 import com.project.mobile_project.ui.theme.Mobile_projectTheme
 import com.project.mobile_project.viewModel.SettingsViewModel
 import com.project.mobile_project.viewModel.UsersViewModel
@@ -75,7 +76,7 @@ class RegistrationScreen: ComponentActivity() {
                         Text(
                             text = "Registrati",
                             fontSize = 20.sp,
-                            color = MaterialTheme.colorScheme.onSecondaryContainer,
+                            color = MaterialTheme.colorScheme.tertiary,
                             textAlign = TextAlign.Center
                         )
 
@@ -85,25 +86,49 @@ class RegistrationScreen: ComponentActivity() {
                             value = firstName,
                             onValueChange = { newText: String -> firstName = newText },
                             label = { Text(getString(R.string.first_name_text)) },
-                            placeholder = { Text(getString(R.string.first_name_text)) }
+                            placeholder = { Text(getString(R.string.first_name_text)) },
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                focusedBorderColor = Accent,
+                                focusedLabelColor = Accent,
+                                focusedLeadingIconColor = Accent,
+                                cursorColor = Accent
+                            )
                         )
                         OutlinedTextField(
                             value = lastName,
                             onValueChange = { newText: String -> lastName = newText },
                             label = { Text(getString(R.string.last_name_text)) },
-                            placeholder = { Text(getString(R.string.last_name_text)) }
+                            placeholder = { Text(getString(R.string.last_name_text)) },
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                focusedBorderColor = Accent,
+                                focusedLabelColor = Accent,
+                                focusedLeadingIconColor = Accent,
+                                cursorColor = Accent
+                            )
                         )
                         OutlinedTextField(
                             value = email,
                             onValueChange = { newText: String -> email = newText },
                             label = { Text(getString(R.string.email_text)) },
-                            placeholder = { Text(getString(R.string.email_text)) }
+                            placeholder = { Text(getString(R.string.email_text)) },
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                focusedBorderColor = Accent,
+                                focusedLabelColor = Accent,
+                                focusedLeadingIconColor = Accent,
+                                cursorColor = Accent
+                            )
                         )
                         OutlinedTextField(
                             value = username,
                             onValueChange = { newText: String -> username = newText },
                             label = { Text(getString(R.string.username_text)) },
-                            placeholder = { Text(getString(R.string.username_text)) }
+                            placeholder = { Text(getString(R.string.username_text)) },
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                focusedBorderColor = Accent,
+                                focusedLabelColor = Accent,
+                                focusedLeadingIconColor = Accent,
+                                cursorColor = Accent
+                            )
                         )
                         OutlinedTextField(
                             value = password,
@@ -124,7 +149,13 @@ class RegistrationScreen: ComponentActivity() {
                                 IconButton(onClick = {passwordVisible = !passwordVisible}){
                                     Icon(imageVector  = image, description)
                                 }
-                            }
+                            },
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                focusedBorderColor = Accent,
+                                focusedLabelColor = Accent,
+                                focusedLeadingIconColor = Accent,
+                                cursorColor = Accent
+                            )
                         )
 
                         Spacer(modifier = Modifier.padding(3.dp))
@@ -169,7 +200,7 @@ class RegistrationScreen: ComponentActivity() {
                                 ContextCompat.startActivity(activity, registrationIntent, null)
                             },
                         ) {
-                            Text("Login")
+                            Text("Login", color = MaterialTheme.colorScheme.onPrimary)
                         }
                     }
                 }

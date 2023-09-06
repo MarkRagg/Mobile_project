@@ -31,6 +31,7 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.LifecycleOwner
 import com.project.mobile_project.MainActivity
 import com.project.mobile_project.R
+import com.project.mobile_project.ui.theme.Accent
 import com.project.mobile_project.ui.theme.Mobile_projectTheme
 import com.project.mobile_project.viewModel.SettingsViewModel
 import com.project.mobile_project.viewModel.UsersViewModel
@@ -70,7 +71,7 @@ class LoginScreen: ComponentActivity() {
                         Text(
                             text = "Accedi",
                             fontSize = 20.sp,
-                            color = MaterialTheme.colorScheme.onSecondaryContainer,
+                            color = MaterialTheme.colorScheme.tertiary,
                             textAlign = TextAlign.Center
                         )
 
@@ -80,7 +81,13 @@ class LoginScreen: ComponentActivity() {
                             value = username,
                             onValueChange = { newText: String -> username = newText },
                             label = { Text(getString(R.string.username_text)) },
-                            placeholder = { Text(getString(R.string.username_text)) }
+                            placeholder = { Text(getString(R.string.username_text)) },
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                focusedBorderColor = Accent,
+                                focusedLabelColor = Accent,
+                                focusedLeadingIconColor = Accent,
+                                cursorColor = Accent
+                            )
                         )
                         OutlinedTextField(
                             value = password,
@@ -101,7 +108,13 @@ class LoginScreen: ComponentActivity() {
                                 IconButton(onClick = {passwordVisible = !passwordVisible}){
                                     Icon(imageVector  = image, description)
                                 }
-                            }
+                            },
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                focusedBorderColor = Accent,
+                                focusedLabelColor = Accent,
+                                focusedLeadingIconColor = Accent,
+                                cursorColor = Accent
+                            )
                         )
 
                         Spacer(modifier = Modifier.padding(3.dp))
@@ -134,9 +147,9 @@ class LoginScreen: ComponentActivity() {
                         Spacer(modifier = Modifier.padding(2.dp))
 
                         TextButton(
-                            onClick = { goingToRegistrationScreen(activity) },
+                            onClick = { goingToRegistrationScreen(activity) }
                         ) {
-                            Text("Registrati ora")
+                            Text("Registrati ora", color = MaterialTheme.colorScheme.onPrimary)
                         }
                     }
                 }
