@@ -3,7 +3,9 @@ package com.project.mobile_project.utilities
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.model.LatLng
@@ -65,7 +67,9 @@ class MapPresenter(private val activity: AppCompatActivity, private val isStarte
 
         val result = insertNewActivity(context, sharedPreferences, activitiesViewModel, elapsedTime)
         val homeIntent = Intent(context, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-        homeIntent.putExtra("Activity added", result)
+        if (!result) {
+            Toast.makeText(context, "Errore nell'inserimento dell'attività", Toast.LENGTH_LONG).show()
+        }
         startActivity(context, homeIntent, null)
         activity.finish()
     }

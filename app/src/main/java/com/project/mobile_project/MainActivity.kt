@@ -27,8 +27,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val sharedPreferences: SharedPreferences = getSharedPreferences(getString(R.string.user_shared_preferences), Context.MODE_PRIVATE)
-        val extras = intent.extras
-        val activityAdded = extras?.getBoolean("Activity added") ?: true
 
         setContent {
             val theme by settingsViewModel.theme.collectAsState(initial = "")
@@ -39,9 +37,6 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    if (!activityAdded) {
-                        Toast.makeText(this, "Errore nell'inserimento dell'attività", Toast.LENGTH_LONG).show()
-                    }
                     if(sharedPreferences.getBoolean(getString(R.string.user_logged_shared_pref), false)) {
                         NavigationApp(
                             sharedPreferences = sharedPreferences,
