@@ -143,9 +143,13 @@ private fun updateActivityTitle(
 }
 
 private fun shareDetails(context: Context, activity: Activity?){
+    val sharedText = ("Titolo: " + activity?.name + "\n" +
+            "Metri: " + activity?.distance + "\n" +
+            "Tempo: " + activity?.totalTime + "\n" +
+            "min/km: " + activity?.pace)
     val sendIntent: Intent = Intent().apply {
         action = Intent.ACTION_SEND
-        putExtra(Intent.EXTRA_TEXT, activity?.name?:"No activity")
+        putExtra(Intent.EXTRA_TEXT, sharedText)
         type = "text/plain"
     }
 
